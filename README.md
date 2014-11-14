@@ -12,6 +12,7 @@ Task Completed:
 	Updating user package, i.ee upgrading or downgrading
 
 Task to Complete:
+
 	Tidy up client interface (not that important)
 	Create services for user to view usage
 
