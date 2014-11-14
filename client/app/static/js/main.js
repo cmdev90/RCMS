@@ -1,13 +1,11 @@
 
 (function (document, window, $, Backbone, _){
-	//still have alot to do
+	
 
 	RCMS.Routers.AppRouter = Backbone.Router.extend({
 
 		routes: {
-			"" 					: "home",
-			"configurations"	: "configurations",			
-			"profile" 			: "profile",
+			"" 					: "home",			
 			"usage"				: "usage",
 			"register"			: "register"
 		},
@@ -20,29 +18,55 @@
 
 		home : function(){	
 
-			console.log('home');
-		},
+			if($.jStorage.get('apiKey')){	
 
-		configurations: function(){	
+				this.authen.selectMenuItem('home');
 
-			console.log('configurations');
-		},
+				this.defaultPackage = new RCMS.Models.PackagesModel();
+				this.defaultPackage.url = 'http://localhost:5000/get/user/package/'+ $.jStorage.get('package');
 
-		profile : function(){			
-			console.log('profile');
+				this.defaultPackage.fetch({
+					success : function(model, response){																											
+						$.each(response.package, function(i, data){
+							this.home = new RCMS.Views.Home({model:data});
+							$("#rcms-body").html(this.home.el);	
+						});						
+					},
+					error : function(model, response){
+						console.log(response);				
+					}
+				});
+				
+
+			}else{
+				this.authen = new RCMS.Views.AuthenticationView({model:new RCMS.Models.AuthenticationModel()});
+				$("#rcms-body").html(this.authen.el);
+			}
 		},
 
 		usage : function(){
-			console.log('usage');
+			if($.jStorage.get('apiKey')){
+				this.authen.selectMenuItem('usage');
+				window.alert("Coming Soon");
+				window.location.hash = "";				
+			}else{
+				this.authen = new RCMS.Views.AuthenticationView({model:new RCMS.Models.AuthenticationModel()});
+				$("#rcms-body").html(this.authen.el);
+			}
 		},
 
 		register : function(){
-			console.log('register');
+			if($.jStorage.get('apiKey')){
+				window.location.hash = "";				
+			}else{
+				this.register = new RCMS.Views.Register({model:new RCMS.Models.Register()});
+				$("#rcms-body").html(this.register.el);	
+			}	
 		}
 
 	});
 
-	RCMS.templateLoader.load(["Login"],function () {      
+	RCMS.templateLoader.load(["Login", "Register", "Home", "Package"],function () {      
 		$(document).ready(function(){
 			app = new RCMS.Routers.AppRouter();
 			Backbone.history.start();

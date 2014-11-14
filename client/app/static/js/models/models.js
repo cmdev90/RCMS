@@ -31,62 +31,61 @@
 	    setApiKey: function(apiKey) {
 	        $.jStorage.set('apiKey', apiKey)
 	        this.set({'apiKey': apiKey});
+	    },
+
+	    setUser : function(userObj){
+	    	$.jStorage.set('username', userObj.PartitionKey);	    	
+	    	$.jStorage.set('firstname', userObj.firstname);
+	    	$.jStorage.set('lastname', userObj.lastname);
+	    	$.jStorage.set('password', userObj.RowKey);
+	    	$.jStorage.set('email', userObj.email);
+	    	$.jStorage.set('package', userObj.package);
 	    }
 	});
 
 
 
-	// RCMS.Models.CustomerModel = Backbone.Model.extend({		
+	RCMS.Models.Register = Backbone.Model.extend({		
 
-	// 	initialize: function(){	
-	// 		console.log('getting data from:');		
-	// 	},
+		urlRoot : 'http://localhost:5000/create/user',
 
-	// 	defaults: {
-	// 		"CUSTNO":200343,
-	// 		"COMPANY":"W.O.M INC. JUST GRILLIN",
-	// 		"ADDR1":"HOLETOWN ",
-	// 		"ADDR2":"",
-	// 		"CITY":"",
-	// 		"STATE":"ST JAMES",
-	// 		"COUNTRY":"",
-	// 		"PHONE":"",
-	// 		"FAX":"",
-	// 		"CONTACT":"",
-	// 		"LASTINVOICEDATE":"1/15/2014",
-	// 		"ROUTENO":"ROUTE2",
-	// 		"CUSTYPE":"M"
-	//     }
-	// });
+		initialize: function(){	
+			console.log('sending data to:' + this.urlRoot);		
+		},
 
-	// RCMS.Collections.CustomerCollection = Backbone.Collection.extend({
-	// 	model 	: RCMS.Models.CustomerModel		
-	// });
+		defaults: {
+			"username" 	: "",
+			"password" 	: "",
+			"firstname" : "",
+			"lastname"	: "",
+			"email"		: ""
+	    }
+	});
 
 
-	// RCMS.Models.OrderModel = Backbone.Model.extend({		
+	RCMS.Models.PackagesModel = Backbone.Model.extend({				
 
-	// 	initialize: function(){	
-	// 		console.log('getting data from:');		
-	// 	},
+		initialize: function(){	
+			console.log('packages model');		
+		},
 
-	// 	defaults: {
-	// 		"ORDERNO":567492,
-	// 		"CUSTNO":100036,
-	// 		"SALEDATE":"12/20/2014",
-	// 		"SHIPDATE":"12/20/2014",
-	// 		"TERMS":"",
-	// 		"TOTALITEMS":741.46,
-	// 		"STANDING_DAY":"TUE",
-	// 		"ROUTENO":"ROUTE3",
-	// 		"TOTALVAT":28.04,
-	// 		"TOTALDISCOUNT":0	
-	//     }
-	// });	
+		defaults: {
+			"name"			: "none",
+			"nodes" 		: "none",
+			"messaging" 	: "none",
+			"note" 			: "none",
+			"users" 		: "none",
+			"voice" 		: "none",
+			"security" 		: "none",
+			"extensions" 	: "none",
+			"cost"			: "$0 US per month"	
+	    }
+	});	
 
-	// RCMS.Collections.OrderCollection = Backbone.Collection.extend({
-	// 	model 	: RCMS.Models.OrderModel		
-	// });
+	RCMS.Collections.PackagesCollection = Backbone.Collection.extend({
+		model 	: RCMS.Models.PackagesModel,
+		url 	: 'http://localhost:5000/get/all/packages'
+	});
 
 
 	// RCMS.Models.OrderDetailsModel = Backbone.Model.extend({		

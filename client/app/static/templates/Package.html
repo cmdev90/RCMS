@@ -1,0 +1,59 @@
+<div class="panel-heading" role="tab" id="<%= name %>">
+  <h4 class="panel-title">
+    <a data-toggle="collapse" data-parent="#accordion" href="#<%= name %>-package" aria-expanded="false" aria-controls="<%= name %>-package">
+      #1 <%= name %> Package
+    </a>
+  </h4>
+</div>
+<div id="<%= name %>-package" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<%= name %>">
+  <div class="panel-body">
+    <div class="row">
+      <%= note %>
+    </div>          
+
+    <table class="table table-hover">
+      <thead>
+        <tr>              
+          <th>Features</th>
+          <th>In Package</th>                    
+        </tr>
+      </thead>
+      <tbody>     
+        <tr>
+          <td>Nodes</td>
+          <td><%= nodes %></td>
+        </tr>
+        <tr>
+          <td>Message per/min</td>
+          <td><%= messaging %></td>
+        </tr>
+        <tr>
+          <td>Concurrent Users</td>
+          <td><%= users %></td>
+        </tr>
+        <tr>
+          <td>Voice over IP</td>
+          <td><%= voice %></td>
+        </tr>
+        <tr>
+          <td>Configured Security</td>
+          <td><%= security %></td>
+        </tr>
+        <tr>
+          <td>Extensions</td>
+          <td><%= extensions %></td>
+        </tr>
+        <tr>
+          <td>Price</td>
+          <td><%= cost %></td>
+        </tr>
+      </tbody>
+    </table>              
+    
+    <div class="row">
+      <div class="col-md-3 col-md-offset-9">
+        <button type="button" class="btn btn-success pkg-select" data-node = "<%= nodes %>" data-name = "<%= name %>"><%= name %></button>
+      </div>
+    </div>      
+  </div>
+</div>

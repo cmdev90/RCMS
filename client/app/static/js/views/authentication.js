@@ -1,11 +1,4 @@
 
-/**
-*   Name    : Nicholas Chamansingh
-*   ID      : 809002243
-*   Course  : Comp 6300
-*
-*/
-
 
 (function (document, window, $, Backbone, _){
 
@@ -43,7 +36,8 @@
 				success:function(model, response){
 					var user = JSON.parse(response.user);					
 					that.model.setApiKey(user.PartitionKey+"_"+user.RowKey);
-					that.show();
+					that.model.setUser(user);
+					that.show();					
 					window.location.reload();
 				},
 				error : function(model, response){
@@ -134,6 +128,64 @@
 		},
 	});
 
+
+	RCMS.Views.Register = Backbone.View.extend({
+
+		className : 'row',
+
+		initialize: function(){			
+			this.render();
+		},		
+		
+		render: function(){							 
+			$(this.el).html(this.template());				
+	        return this;
+		},
+
+		events : {
+			'submit #reg' : 'register'
+		},
+
+		register : function(){	
+			var that = this;
+			
+			this.hide();			
+
+			this.model.save(this.getFormData(),{
+				success:function(model, response){
+					console.log(response);
+					that.show();					
+				},
+				error : function(model, response){
+					console.log(response);
+					that.show();
+				}
+			});
+			$('input[type=text],input[type=password]').val('');
+			return false;
+		},		
+
+		getFormData : function(){			
+			var data = {},
+			form = this.$el.find("#reg"),
+
+			viewArr = form.serializeArray();			
+			$.each(viewArr, function(i,d){
+				data[viewArr[i].name] = viewArr[i].value;
+			});			
+			return data;
+		},
+
+		hide : function(){
+			$("#rcms-body").hide();
+			$("#loading").show();			
+		},
+
+		show : function(){
+			$("#rcms-body").show();
+			$("#loading").hide();			
+		}
+	});
 
 
 

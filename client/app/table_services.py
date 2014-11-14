@@ -1,14 +1,17 @@
-from azure.storage import TableService, Entity
 import json
+from azure.storage import TableService, Entity
 
 
 account_name = 'rcms'     
 account_key = '9L1kZqrgAovvt1KI3xOfRj6RxLPt+hWpAI2mfsJ3zpf6DjMCN/TqYcaCb956jYG8qELgWpv0T0Cn5OC4vCPOng=='
 table = 'users'
 priority = '200'
+json_data =	open('packages.json')
 
-table_service = TableService(account_name = account_name, account_key = account_key)
-table_service.create_table(table)
+packages = json.dumps(json.load(json_data))
+
+ts = TableService(account_name = account_name, account_key = account_key)
+ts.create_table(table)
 
 def users_to_json(user_list):
 
@@ -19,15 +22,19 @@ def users_to_json(user_list):
 		list.append(u)
 	return json.dumps(list, separators=(',',':'))
 
-def createUser(username, password):
+def createUser(new_user):
 	user = Entity()
-	user.PartitionKey = username
-	user.RowKey = password
+	user.PartitionKey = new_user["username"]
+	user.RowKey = new_user["password"]
+	user.email = new_user["email"]
+	user.firstname = new_user["firstname"]
+	user.lastname = new_user["lastname"]
+	user.package = "free"
+	user.nodes = "2"
 	user.priority = priority
 
-
 	try:
-		table_service.insert_entity(table,user)
+		ts.insert_entity(table,user)
 		return True
 	except Exception, e:
 		return False
@@ -35,7 +42,7 @@ def createUser(username, password):
 
 def get_user_by_username(username):
 	try:
-		user = table_service.query_entities(table, "PartitionKey eq '"+username+"'")
+		user = ts.query_entities(table, "PartitionKey eq '"+username+"'")
 		return users_to_json(user)
 	except Exception, e:
 		return None
@@ -43,7 +50,28 @@ def get_user_by_username(username):
 
 def authenticate(username, password):
 	try:
-		user = table_service.get_entity(table, username, password)
+		user = ts.get_entity(table, username, password)
 		return json.dumps(user.__dict__)
 	except Exception, e:
 		return None	
+
+def get_package(id):
+    results = []
+
+    def _decode_dict(a_dict):
+        try: results.append(a_dict[id])
+        except KeyError: pass
+        return a_dict
+
+    json.loads(packages, object_hook=_decode_dict)
+    return results
+
+
+def update_user_package(data):
+	user = {"nodes" : data['nodes'], "package" : data['package']}
+	try:
+		ts.update_entity(table, data['username'], data['password'],user)
+		return True
+	except Exception, e:
+		return False
+	
