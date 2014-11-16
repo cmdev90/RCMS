@@ -24,8 +24,8 @@ def users_to_json(user_list):
 
 def createUser(new_user):
 	user = Entity()
-	user.PartitionKey = new_user["username"]
-	user.RowKey = new_user["password"]
+	user.PartitionKey = new_user["username"] #uiquely identifies a partition of entities 
+	user.RowKey = new_user["password"] # row key will uniquely identify a particular entity
 	user.email = new_user["email"]
 	user.firstname = new_user["firstname"]
 	user.lastname = new_user["lastname"]
@@ -43,7 +43,7 @@ def createUser(new_user):
 def get_user_by_username(username):
 	try:
 		user = ts.query_entities(table, "PartitionKey eq '"+username+"'")
-		return users_to_json(user)
+		return json.dumps(user[0].__dict__) #users_to_json(user)
 	except Exception, e:
 		return None
 
