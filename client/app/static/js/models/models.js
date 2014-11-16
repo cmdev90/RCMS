@@ -87,35 +87,4 @@
 		url 	: 'http://localhost:5000/get/all/packages'
 	});
 
-
-	// RCMS.Models.OrderDetailsModel = Backbone.Model.extend({		
-
-	// 	initialize: function(){	
-	// 		console.log('getting data from:');		
-	// 	}
-	// });
-
-	// RCMS.Collections.OrderDetailsCollection = Backbone.Collection.extend({
-	// 	model 	: RCMS.Models.OrderDetailsModel		
-	// });
-
-
-	// RCMS.Models.StandingOrderDetailsModel = Backbone.Model.extend({		
-
-	// 	initialize: function(){	
-	// 		console.log('getting data from:');		
-	// 	}
-	// });
-
-	// RCMS.Collections.StandingOrderDetailsCollection = Backbone.Collection.extend({
-	// 	model 	: RCMS.Models.StandingOrderDetailsModel		
-	// });
-
-	// RCMS.Models.RemoveModel = Backbone.Model.extend({		
-
-	// 	initialize: function(){	
-	// 		console.log('getting data from:');		
-	// 	}
-	// });
-
 }(document, this, jQuery, Backbone, _));
