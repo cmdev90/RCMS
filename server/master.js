@@ -1,4 +1,4 @@
-var cluster = require('cluster')
+var ClusterMaster = require('cluster')
 	, express = require('express')
 	, app = express()
 	, azure = require('azure-storage')
@@ -13,11 +13,7 @@ var account_name = 'rcms'
 var RunRecords = {}
 
 // Setup this process as the master process
-cluster.setupMaster({
-  exec : "worker.js",
-  args : ["--use", "https"],
-  silent : true
-});
+ClusterMaster.setupMaster({ exec : "worker.js" })
 
 // updates the run record 
 var UpdateRunRecords = function (data, fn) {
@@ -42,7 +38,36 @@ var UpdateRunRecords = function (data, fn) {
 
 
 var MaintainCluster = function (key, fn) {
+	var cluster = RunRecords[key]["node_cluster"]
 
+	if (cluster.length < RunRecords[key]['node_count']) {
+		// Need to create new wrokers for this record.
+		while (cluster.length < RunRecords[key]['node_count']) {
+			try {
+				var worker = ClusterMaster.fork()
+				RunRecords[key]["node_cluster"].push(worker)
+				console.log("Master successfully created worker thread " + worker.id + " and added it to the working pool " + key)
+			} catch (err) {
+				fn(err, null);
+			}
+		}
+	}
+	else {
+		// Need to create new wrokers for this record.
+		while (cluster.length > RunRecords[key]['node_count']) {
+			try {
+				var worker = RunRecords[key]["node_cluster"][cluster.length - 1]
+				console.log("Master will now kill worker thread " + worker.id + " from the working pool " + key)
+				worker.kill()
+				RunRecords[key]["node_cluster"].splice([cluster.length - 2],[cluster.length - 1])
+			} catch (err) {
+				fn(err, null);
+			}
+		}
+	}
+
+	// All processing was successfully completed
+	fn(null, "Success");
 }
 
 // Go into the azure and pull this clients records. Compare the differences
@@ -60,13 +85,12 @@ app.get('/update/:username/:password', function (req, res) {
 
 		if(error) return res.send('Goodbye cruel world!' + error)
 		if (result) {
-			UpdateRunRecords(result, function (error, result){
+			UpdateRunRecords(result, function (error, response){
 				if (error) return res.send(error)
-
-				return res.send(RunRecords)
+				return res.send("Success")
 			})
 		}
-		return res.send('response' + response)
+		// return res.send('response' + response)
 	})
   
 })
