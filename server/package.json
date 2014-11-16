@@ -1,0 +1,16 @@
+{
+  "name": "rcms-server",
+  "version": "0.0.1",
+  "description": "The rcms-server application that will handle all message routing activities",
+  "author": "Cherlton Millette <cherlton.millette@gmail.com>",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wryi/RCMS.git"
+  },
+  "dependencies": {
+    "express": "4.10.2",
+    "azure-storage": "0.4.0"
+  }
+}
+  
