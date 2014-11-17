@@ -74,7 +74,7 @@
 			data = {},
 			that = this,
 			pkg = new RCMS.Models.PackagesModel();
-			pkg.url = 'http://localhost:5000/update/user/package';
+			pkg.url = '/update/user/package';
 
 			if (package === $.jStorage.get('package')) {
 				this.show();
