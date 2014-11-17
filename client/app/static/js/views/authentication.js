@@ -30,7 +30,7 @@
 			var that = this;
 			
 			this.hide();
-			this.model.url = "http://localhost:5000/user/login";
+			this.model.url = "/user/login";
 
 			this.model.save(this.getFormData(),{
 				success:function(model, response){

@@ -23,7 +23,7 @@
 				this.authen.selectMenuItem('home');
 
 				this.defaultPackage = new RCMS.Models.PackagesModel();
-				this.defaultPackage.url = 'http://localhost:5000/get/user/package/'+ $.jStorage.get('package');
+				this.defaultPackage.url = '/get/user/package/'+ $.jStorage.get('package');
 
 				this.defaultPackage.fetch({
 					success : function(model, response){																											

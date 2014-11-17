@@ -47,7 +47,7 @@
 
 	RCMS.Models.Register = Backbone.Model.extend({		
 
-		urlRoot : 'http://localhost:5000/create/user',
+		urlRoot : '/create/user',
 
 		initialize: function(){	
 			console.log('sending data to:' + this.urlRoot);		
@@ -84,7 +84,7 @@
 
 	RCMS.Collections.PackagesCollection = Backbone.Collection.extend({
 		model 	: RCMS.Models.PackagesModel,
-		url 	: 'http://localhost:5000/get/all/packages'
+		url 	: '/get/all/packages'
 	});
 
 }(document, this, jQuery, Backbone, _));
