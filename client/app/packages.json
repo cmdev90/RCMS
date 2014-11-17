@@ -17,7 +17,7 @@
 		{
 			"basic" : {
 					"name"			: "Basic",
-					"nodes" 		: "4",
+					"nodes" 		: "8",
 					"messaging" 	: "min 200m/m",
 					"note" 			: "The basic package comes with a minimum of 4 nodes. With these 4 nodes, there is a guarantee of a minimum of 200 concurrent messages per minute(m/m) and supports at most 10000 users. The free package does not come with voice over ip for voice calls, security configurations and supports basic extensions. To enable any feature not offered in the basic package, you simply have to upgrade to one of our other packages.",
 					"users" 		: "10000",
