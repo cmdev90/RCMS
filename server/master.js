@@ -59,7 +59,7 @@ var MaintainCluster = function (key, fn) {
 				var worker = RunRecords[key]["node_cluster"][cluster.length - 1]
 				console.log("Master will now kill worker thread " + worker.id + " from the working pool " + key)
 				worker.kill()
-				RunRecords[key]["node_cluster"].splice([cluster.length - 2],[cluster.length - 1])
+				RunRecords[key]["node_cluster"].splice([cluster.length - 1],[cluster.length])
 			} catch (err) {
 				fn(err, null);
 			}
