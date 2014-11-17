@@ -1,4 +1,4 @@
-#!/home/adminuser/comp6905/RCMS/client/venv/bin/python2
+#!/home/adminuser/client/venv/bin/python2
 
 # -*- coding: utf-8 -*-
 import re

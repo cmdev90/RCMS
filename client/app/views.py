@@ -1,10 +1,8 @@
+from app import app
 import os
-from flask import Flask, jsonify, abort, make_response, request, url_for
+from flask import jsonify, abort, make_response, request, url_for
 from flask.ext.httpauth import HTTPBasicAuth
 import table_services, json
-
-app = Flask(__name__, static_url_path = "")
-
 
 
 @app.route('/get/user/username/<username>', methods=['GET'])
@@ -83,12 +81,3 @@ def user_login():
 		return jsonify({"user" : user}), 200
 	else :
 		return jsonify({"user" : {}}), 404
-
-
-if __name__ == '__main__':
-	# port = int(os.environ.get("PORT", 5000))
-	# app.run(host='0.0.0.0', port=port)
-	app.run(debug=True)
-	# ip: 104.131.21.74
-	# username : nick
-	# password : changethisplease
