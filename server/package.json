@@ -9,8 +9,8 @@
     "url": "https://github.com/wryi/RCMS.git"
   },
   "dependencies": {
+    "azure-storage": "0.4.0",
     "express": "4.10.2",
-    "azure-storage": "0.4.0"
+    "hat": "0.0.3"
   }
 }
-  
