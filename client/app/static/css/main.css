@@ -4,9 +4,13 @@
    Author's custom styles
    ========================================================================== */
 
-   #content{
-	min-height: 500px;   	
-   }
+	#content{
+		min-height: 500px;   	
+	}
+
+	.panel-body-format{
+		padding: 0px 0px 0px 10px;
+	}
 
 
 

@@ -47,8 +47,14 @@
 		usage : function(){
 			if($.jStorage.get('apiKey')){
 				this.authen.selectMenuItem('usage');
-				window.alert("Coming Soon");
-				window.location.hash = "";				
+				swal({
+						title: "Hey!!",
+						text: "Good Things come to those who wait..",
+						imageUrl: 'img/uc.png'
+					},
+				function(){
+					window.location.hash = "";								
+				});				
 			}else{
 				this.authen = new RCMS.Views.AuthenticationView({model:new RCMS.Models.AuthenticationModel()});
 				$("#rcms-body").html(this.authen.el);

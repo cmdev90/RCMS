@@ -1,14 +1,14 @@
 <div class="panel-heading" role="tab" id="<%= name %>">
   <h4 class="panel-title">
     <a data-toggle="collapse" data-parent="#accordion" href="#<%= name %>-package" aria-expanded="false" aria-controls="<%= name %>-package">
-      #1 <%= name %> Package
+      RCMS: <%= name %> Package
     </a>
   </h4>
 </div>
 <div id="<%= name %>-package" class="panel-collapse collapse" role="tabpanel" aria-labelledby="<%= name %>">
   <div class="panel-body">
     <div class="row">
-      <%= note %>
+      <p class="panel-body-format"><%= note %></p>
     </div>          
 
     <table class="table table-hover">
@@ -52,8 +52,7 @@
     
     <div class="row">
       <div class="col-md-3 col-md-offset-9">
-        <button type="button" class="btn btn-success pkg-select" data-node = "<%= nodes %>" data-name = "<%= name %>"><%= name %></button>
-      </div>
+        <button type="button" class="btn btn-success pkg-select" data-node = "<%= nodes %>" data-name = "<%= name %>"><%= name %></button>        
     </div>      
   </div>
 </div>

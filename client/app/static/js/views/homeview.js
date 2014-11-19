@@ -67,7 +67,7 @@
 			'click .pkg-select' : 'setPackage'
 		},
 
-		setPackage : function(e){
+		setPackage : function(e){			
 			this.hide();
 			var package = $(e.target).attr('data-name').toLocaleLowerCase(),
 			nodes = $(e.target).attr('data-node'),
@@ -78,7 +78,7 @@
 
 			if (package === $.jStorage.get('package')) {
 				this.show();
-				window.alert("This is your current package");
+				swal("Note!", "This is your current package");								
 			}else{
 				data = {
 					"username" : $.jStorage.get('username'),
@@ -91,8 +91,15 @@
 					success:function(model, response){	
 						console.log(JSON.stringify(response));	
 						$.jStorage.set('package', package);
-						that.show();	
-						window.location.reload();							
+						that.show();
+						swal({
+							title: "Upgraded!",
+							text: "Your Your package has been upgraded!",
+							type: "success"
+						},
+						function(){
+							window.location.reload();							
+						});													
 					},
 					error : function(model, response){
 						console.log(JSON.stringify(response));										
