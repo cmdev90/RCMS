@@ -48,7 +48,7 @@
 			if($.jStorage.get('apiKey')){
 				this.authen.selectMenuItem('usage');
 				swal({
-						title: "Hey!!",
+						title: "Page Under Construction!!",
 						text: "Good Things come to those who wait..",
 						imageUrl: 'img/uc.png'
 					},
