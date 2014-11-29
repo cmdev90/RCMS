@@ -13,8 +13,7 @@
 		render: function(){
 
 			if (this.model.get('loggedIn')) {
-				$("#logout_action").html(new RCMS.Views.Logout({model:this.model}).el);	            	            
-				console.log("logged in");
+				$("#logout_action").html(new RCMS.Views.Logout({model:this.model}).el);	            	            				
 	        } else {
 	            this.$el.html(new RCMS.Views.Login().el);	
 	            $("#logout_action").html('');            
@@ -43,6 +42,7 @@
 				error : function(model, response){
 					console.log(response);
 					that.show();
+					swal("Oops...", "Something went wrong, Please Try again!", "error");
 				}
 			});
 			$('input[type=text],input[type=password]').val('');
@@ -154,11 +154,20 @@
 			this.model.save(this.getFormData(),{
 				success:function(model, response){
 					console.log(response);
-					that.show();					
+					that.show();	
+					swal({
+							title: "Success!!",
+							text: "Your Account has been created, Prepare for Awesomeness!",
+							type: "success"
+						},
+					function(){
+						window.location.hash = "";								
+					});				
 				},
 				error : function(model, response){
 					console.log(response);
 					that.show();
+					swal("Oops...", "Something went wrong, Please Try again!", "error");
 				}
 			});
 			$('input[type=text],input[type=password]').val('');
