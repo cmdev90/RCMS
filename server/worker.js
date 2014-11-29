@@ -1,28 +1,26 @@
-var net = require('net')
-, hat = require('hat')
+var app = require('express')();
+var http = require('http').Server(app);
+var io = require('socket.io')(http)
+    , cluster = require('cluster')
+    , numCPUs = require('os').cpus().length
+    , hat = require('hat')
 
-// create a random process ID string.
-var processID = hat()
-    , clientPool = [] // keep a list of all the clients connected to this Message Service instance.
+var nodeId  = hat();
 
+console.log('created worker ' + nodeId);
 
-var server = net.createServer(function(socket) { //'connection' listener
-    // each time a
-    console.log('Client connected to Message service %s', processID)
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/index.html');
+});
 
-    socket.on('end', function() {
-        console.log('Client disconnected from %s', processID)
-    })
+io.on('connection', function(socket){
+    console.log("client connected to " + nodeId)
+  socket.on('chat message', function(msg){
+    console.log("Messaging from " + nodeId)
+    io.emit('chat message', msg);
+  });
+});
 
-    socket.on('data', function(chunk) {
-        console.log(chunk.toString())
-    })
-
-    socket.setKeepAlive(true, 1000)
-    socket.write(processID + ' hello\r\n')
-    socket.pipe(socket)
-})
-
-server.listen(1337, function() { //'listening' listener
-    console.log('Message service %s bounded', processID)
-})
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
