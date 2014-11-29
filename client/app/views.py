@@ -79,4 +79,4 @@ def user_login():
 	if user is not None:
 		return jsonify({"user" : user}), 200
 	else :
-		return jsonify({"user" : {"jarred was here"}}), 404
+		return jsonify({"user" : {}}), 404
