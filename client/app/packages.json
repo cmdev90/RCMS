@@ -1,0 +1,60 @@
+{
+	"packages" : [
+		{
+			"free" : {
+					"name"			: "Free",
+					"nodes" 		: "2",
+					"messaging" 	: "min 100m/m",
+					"note" 			: "The free package comes with a minimum of 2 nodes. With these 2 nodes, there is a guarantee of a minimum of 100 concurrent messages per minute(m/m) and supports at most 1000 users. The free package does not come with voice over ip for voice calls, security configurations and no extensions. To enable any feature not offered in the free package, you simply have to upgrade to one of our other packages.",
+					"users" 		: "1000",
+					"voice" 		: "none",
+					"security" 		: "none",
+					"extensions" 	: "none",
+					"cost"			: "$0 US per month"
+
+				}
+		},
+		{
+			"basic" : {
+					"name"			: "Basic",
+					"nodes" 		: "8",
+					"messaging" 	: "min 200m/m",
+					"note" 			: "The basic package comes with a minimum of 4 nodes. With these 4 nodes, there is a guarantee of a minimum of 200 concurrent messages per minute(m/m) and supports at most 10000 users. The free package does not come with voice over ip for voice calls, security configurations and supports basic extensions. To enable any feature not offered in the basic package, you simply have to upgrade to one of our other packages.",
+					"users" 		: "10000",
+					"voice" 		: "none",
+					"security" 		: "none",
+					"extensions" 	: "basic",
+					"cost"			: "$10 US per month"
+
+				}
+		},
+		{
+			"premium" : {
+					"name"			: "Premium",
+					"nodes" 		: "16",
+					"messaging" 	: "min 1000m/m",
+					"note" 			: "The premium package comes with a minimum of 16 nodes. With these 16 nodes, there is a guarantee of a minimum of 1000 concurrent messages per minute(m/m) and supports unlimited users. The premium package supports unlimited voice over ip for voice calls, security configurations and extensions. To disable any feature offered in the premium package, you simply have to downgrade to one of our other packages.",
+					"users" 		: "unlimited",
+					"voice" 		: "unlimited",
+					"security" 		: "unlimited",
+					"extensions" 	: "unlimited",
+					"cost"			: "$30 US per month"
+
+				}
+		},
+		{
+			"enterprise" : {
+					"name"			: "Enterprise",
+					"nodes" 		: "unlimited",
+					"messaging" 	: "unlimited m/m",
+					"note" 			: "The enterprise package comes with a minimum of unlimited nodes. As many nodes as you need will be provided on demand. With these 16 nodes, the guarantee is unlimite concurrent messages per minute(m/m) and supports unlimited users. The enterprise package supports unlimited voice over ip for voice calls, security configurations and extensions. To disable any feature offered in the enterprise package, you simply have to downgrade to one of our other packages.",
+					"users" 		: "unlimited",
+					"voice" 		: "unlimited",
+					"security" 		: "unlimited",
+					"extensions" 	: "unlimited",
+					"cost"			: "$100 US per month"
+
+				}
+		}
+	]
+}

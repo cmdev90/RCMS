@@ -39,9 +39,11 @@
 	    	$.jStorage.set('lastname', userObj.lastname);
 	    	$.jStorage.set('password', userObj.RowKey);
 	    	$.jStorage.set('email', userObj.email);
-	    	$.jStorage.set('package', userObj.package);
+	    	$.jStorage.set('package', userObj.package_type);
+	    	$.jStorage.set('key', userObj.key);
+	    	$.jStorage.set('port', userObj.port);
 	    }
-	});
+	})
 
 
 

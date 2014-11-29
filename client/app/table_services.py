@@ -1,42 +1,36 @@
-import json
+import json, random, services
 from azure.storage import TableService, Entity
 
 
 account_name = 'rcms'     
 account_key = '9L1kZqrgAovvt1KI3xOfRj6RxLPt+hWpAI2mfsJ3zpf6DjMCN/TqYcaCb956jYG8qELgWpv0T0Cn5OC4vCPOng=='
-table = 'users'
+table = 'storage'
 priority = '200'
-json_data =	open('packages.json')
+unique_sequence = services.uniqueid() # next(unique_sequence)
 
-packages = json.dumps(json.load(json_data))
 
 ts = TableService(account_name = account_name, account_key = account_key)
 ts.create_table(table)
+# ts.delete_table(table)	
 
-def users_to_json(user_list):
-
-	list = []
-	u = {}
-	for user in user_list:
-		u['user'] = user.__dict__
-		list.append(u)
-	return json.dumps(list, separators=(',',':'))
 
 def createUser(new_user):
 	user = Entity()
-	user.PartitionKey = new_user["username"] #uiquely identifies a partition of entities 
-	user.RowKey = new_user["password"] # row key will uniquely identify a particular entity
+	user.PartitionKey = new_user["username"]  #uiquely identifies a partition of entities 
+	user.RowKey = new_user["password"] # row key will uniquely identify a particular entity	
+	user.package_type = services.package_free 
+	user.key = str(next(unique_sequence)) 
 	user.email = new_user["email"]
 	user.firstname = new_user["firstname"]
 	user.lastname = new_user["lastname"]
-	user.package = "free"
-	user.nodes = "2"
+	user.package = json.dumps(services.get_package(services.package_free))
+	user.port = str(services.get_port())
 	user.priority = priority
-
+	
 	try:
 		ts.insert_entity(table,user)
 		return True
-	except Exception, e:
+	except Exception, e:		
 		return False
 
 
@@ -55,20 +49,9 @@ def authenticate(username, password):
 	except Exception, e:
 		return None	
 
-def get_package(id):
-    results = []
-
-    def _decode_dict(a_dict):
-        try: results.append(a_dict[id])
-        except KeyError: pass
-        return a_dict
-
-    json.loads(packages, object_hook=_decode_dict)
-    return results
-
 
 def update_user_package(data):
-	user = {"nodes" : data['nodes'], "package" : data['package']}
+	user = {"package_type" : data['package'], "package" : json.dumps(services.get_package(data['package']))}
 	try:
 		ts.update_entity(table, data['username'], data['password'],user)
 		return True

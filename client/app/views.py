@@ -2,7 +2,7 @@ from app import app
 import os
 from flask import jsonify, abort, make_response, request, url_for
 from flask.ext.httpauth import HTTPBasicAuth
-import table_services, json
+import table_services, services, json
 
 
 @app.route('/get/user/username/<username>', methods=['GET'])
@@ -17,7 +17,7 @@ def get_user_by_username(username):
 
 @app.route('/get/user/package/<package>', methods=['GET'])
 def get_user_package(package):
-	p = table_services.get_package(package)
+	p = services.get_package(package)
 	if p is not None:
 		return jsonify({"package" : p}), 200
 	else :
@@ -26,7 +26,7 @@ def get_user_package(package):
 
 @app.route('/get/all/packages', methods=['GET'])
 def get_all_package():
-	p = json.loads(table_services.packages)
+	p = json.loads(services.packages)
 	if p is not None:
 		return jsonify(p), 200
 	else :
@@ -59,8 +59,7 @@ def update_user_package():
 	data = {
 		"username" 	: request.json['username'],
 		"password" 	: request.json['password'],
-		"package" 	: request.json['package'],
-		"nodes" 	: request.json['nodes'],		
+		"package" 	: request.json['package']			
 	}	
 	
 	if table_services.update_user_package(data) :

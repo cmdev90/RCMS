@@ -83,8 +83,7 @@
 				data = {
 					"username" : $.jStorage.get('username'),
 					"password"	: $.jStorage.get('password'),
-					"package"	: package,
-					"nodes"		: nodes
+					"package"	: package
 				};
 
 				pkg.save(data,{
