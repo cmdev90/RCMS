@@ -60,7 +60,7 @@ var MaintainInstance = function (key, fn) {
 
 // Go into the azure and pull this clients records. Compare the differences
 // between the running instances and what it should be on record.
-// app.get('/update_package/:package/:auth/:port', function (req, res) {
+app.get('/update_package/:package/:auth/:port', function (req, res) {
 	// var data = {
 	// 	_package: req.params['package']
 	// 	, _authKey: req.params['auth']
@@ -69,7 +69,7 @@ var MaintainInstance = function (key, fn) {
 
 	// Set up variables we are going to need
 	var partitionKey = 'users'
-		, rowKey = 'john@mail.com'
+		, rowKey = 'jane@mail.com'
 		, table = 'storage'
 		, tableService = azure.createTableService(account_name, account_key) // by creating a new table service!
 
@@ -77,27 +77,30 @@ var MaintainInstance = function (key, fn) {
 	tableService.retrieveEntity(table, partitionKey, rowKey, function (error, data, response){
 
 		console.log(data);
-		// if(error) return res.send('Goodbye cruel world!' + error)
-		// if (data) {
-		// 	UpdateInstancePackage(data, function (error, response){
-		// 		if (error) return res.send(error)
 
-		// 		var i = 0
-		// 		for (var r in RunRecords){
-		// 			i++
-		// 		}
+		if(error) return res.send('Goodbye cruel world!' + error)
+		if (data) {
+			UpdateInstancePackage({_package: data.package_type._, _port: data.port._, _authKey: data.key._, _priority: data.priority._}, function (error, response){
+				if (error) return res.send(error)
 
-		// 		console.log(i)
+				var i = 0
+				for (var r in RunRecords){
+					i++
+				}
 
-		// 		return res.send("Success")
-		// 	})
-		// }
-		// return res.send('response' + response)
+				console.log(i)
+
+				return res.send(response)
+			})
+		}
+		else {
+ 			return res.send('response' + response)
+ 		}
 	})
-// })
+})
 
-// var port = process.env.PORT || 3000
-// app.listen(port, function () {
-//   console.log('Node manager listening at port %s', port)
-// })
+var port = process.env.PORT || 3000
+app.listen(port, function () {
+  console.log('Node manager listening at port %s', port)
+})
 
