@@ -38,7 +38,7 @@ var MaintainInstance = function (key, fn) {
 		try {
 			console.log("Master will now kill instance " + instance.id + " from the working pool " + key)
 			instance.kill()
-			RunRecords[key]["instance"] = cluster.fork({port: RunRecords[key]['port']})
+			RunRecords[key]["instance"] = cluster.fork({port: RunRecords[key]['port'], auth: key, config: 'free'})
 		} 
 		catch (err) {
 			fn(err, null)
@@ -80,7 +80,7 @@ app.get('/update_package/:package/:auth/:port', function (req, res) {
 
 		if(error) return res.send('Goodbye cruel world!' + error)
 		if (data) {
-			UpdateInstancePackage({_package: data.package_type._, _port: data.port._, _authKey: data.key._, _priority: data.priority._}, function (error, response){
+			UpdateInstancePackage({_package: 'free' /*data.package_type._*/, _port:3010/*data.port._*/, _authKey: 'sdjfg76rrtduyf64a7yig58=-8r7'/*data.key._*/, _priority: 200/*data.priority._*/}, function (error, response){
 				if (error) return res.send(error)
 
 				var i = 0
