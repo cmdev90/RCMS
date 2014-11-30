@@ -5,9 +5,10 @@ var io = require('socket.io')(http)
     , numCPUs = require('os').cpus().length
     , hat = require('hat')
 
+
 var nodeId  = hat();
 
-console.log('created worker ' + nodeId);
+console.log('created worker ' + nodeId + ' on port ' + process.env.port);
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -21,6 +22,6 @@ io.on('connection', function(socket){
   });
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(process.env.port, function(){
+  console.log('listening on *:' + process.env.port);
 });
