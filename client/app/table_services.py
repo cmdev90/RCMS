@@ -1,4 +1,4 @@
-import json, random, services
+import json, random, services, hashlib
 from azure.storage import TableService, Entity
 
 
@@ -37,16 +37,18 @@ def createUser(new_user):
 
 def get_user_by_email(email):
 	try:
-		user = ts.query_entities(table, "PartitionKey eq '"+email+"'")
-		return json.dumps(user[0].__dict__) #users_to_json(user)
+		user = ts.get_entity(table, partition, email)	
+		return user.__dict__
 	except Exception, e:
 		return None
 
 
 def authenticate(email, password):
-	try:
-		user = ts.get_entity(table, partition, email)	
-		if user.password == password:
+
+	try:		
+		user = ts.get_entity(table, partition, email)		
+
+		if user.password == hashlib.sha1(password).hexdigest():
 			return json.dumps(user.__dict__)
 		else :
 			return None

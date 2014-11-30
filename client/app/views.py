@@ -2,7 +2,7 @@ from app import app
 import os
 from flask import jsonify, abort, make_response, request, url_for
 from flask.ext.httpauth import HTTPBasicAuth
-import table_services, services, json
+import table_services, services, json, hashlib
 
 
 @app.route('/get/user/email/<email>', methods=['GET'])
@@ -39,12 +39,12 @@ def create_user():
 	if not request.json:
 		abort(400)
 	user = {		
-		"password" 	: request.json['password'],
+		"password" 	: hashlib.sha1(request.json['password']).hexdigest(),
 		"email" 	: request.json['email'],
 		"firstname" : request.json['firstname'],
 		"lastname" 	: request.json['lastname']
 	}	
-	
+	print user
 	if table_services.createUser(user) :
 		return jsonify({"response": "successful"}), 201
 	else :
@@ -59,7 +59,8 @@ def update_user_package():
 		"email" 	: request.json['email'],
 		"password" 	: request.json['password'],
 		"package" 	: request.json['package']			
-	}
+	}	
+
 	
 	if table_services.update_user_package(data) :
 		return jsonify({"response": "successful"}), 201
