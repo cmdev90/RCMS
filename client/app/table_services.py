@@ -6,27 +6,28 @@ account_name = 'rcms'
 account_key = '9L1kZqrgAovvt1KI3xOfRj6RxLPt+hWpAI2mfsJ3zpf6DjMCN/TqYcaCb956jYG8qELgWpv0T0Cn5OC4vCPOng=='
 table = 'storage'
 priority = '200'
+partition = 'users'
 unique_sequence = services.uniqueid() # next(unique_sequence)
 
 
 ts = TableService(account_name = account_name, account_key = account_key)
 ts.create_table(table)
+
 # ts.delete_table(table)	
 
 
 def createUser(new_user):
 	user = Entity()
-	user.PartitionKey = new_user["username"]  #uiquely identifies a partition of entities 
-	user.RowKey = new_user["password"] # row key will uniquely identify a particular entity	
+	user.PartitionKey = partition #uiquely identifies a partition of entities 
+	user.RowKey = new_user["email"]
+	user.password = new_user["password"]
 	user.package_type = services.package_free 
-	user.key = str(next(unique_sequence)) 
-	user.email = new_user["email"]
+	user.key = str(next(unique_sequence)) 	
 	user.firstname = new_user["firstname"]
 	user.lastname = new_user["lastname"]
 	user.package = json.dumps(services.get_package(services.package_free))
 	user.port = str(services.get_port())
-	user.priority = priority
-	
+	user.priority = priority	
 	try:
 		ts.insert_entity(table,user)
 		return True
@@ -34,18 +35,22 @@ def createUser(new_user):
 		return False
 
 
-def get_user_by_username(username):
+def get_user_by_email(email):
 	try:
-		user = ts.query_entities(table, "PartitionKey eq '"+username+"'")
+		user = ts.query_entities(table, "PartitionKey eq '"+email+"'")
 		return json.dumps(user[0].__dict__) #users_to_json(user)
 	except Exception, e:
 		return None
 
 
-def authenticate(username, password):
+def authenticate(email, password):
 	try:
-		user = ts.get_entity(table, username, password)
-		return json.dumps(user.__dict__)
+		user = ts.get_entity(table, partition, email)	
+		if user.password == password:
+			return json.dumps(user.__dict__)
+		else :
+			return None
+		
 	except Exception, e:
 		return None	
 

@@ -11,7 +11,9 @@
 
 		render : function(){
 
-			$(this.el).html(this.template(this.model));				
+			$(this.el).html(this.template(this.model));	
+			this.$el.find("#key").html("Acess Token: "+$.jStorage.get('key'));
+			this.$el.find("#port").html("Port: "+$.jStorage.get('port'));
 			this.packages(this.$el.find("#accordion"));
 	        return this;
 		},

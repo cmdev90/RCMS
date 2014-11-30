@@ -33,12 +33,11 @@
 	        this.set({'apiKey': apiKey});
 	    },
 
-	    setUser : function(userObj){
-	    	$.jStorage.set('username', userObj.PartitionKey);	    	
+	    setUser : function(userObj){	    		    
 	    	$.jStorage.set('firstname', userObj.firstname);
 	    	$.jStorage.set('lastname', userObj.lastname);
 	    	$.jStorage.set('password', userObj.RowKey);
-	    	$.jStorage.set('email', userObj.email);
+	    	$.jStorage.set('email', userObj.PartitionKey);
 	    	$.jStorage.set('package', userObj.package_type);
 	    	$.jStorage.set('key', userObj.key);
 	    	$.jStorage.set('port', userObj.port);
@@ -55,8 +54,7 @@
 			console.log('sending data to:' + this.urlRoot);		
 		},
 
-		defaults: {
-			"username" 	: "",
+		defaults: {			
 			"password" 	: "",
 			"firstname" : "",
 			"lastname"	: "",

@@ -5,9 +5,9 @@ from flask.ext.httpauth import HTTPBasicAuth
 import table_services, services, json
 
 
-@app.route('/get/user/username/<username>', methods=['GET'])
-def get_user_by_username(username):
-	user = table_services.get_user_by_username(username)
+@app.route('/get/user/email/<email>', methods=['GET'])
+def get_user_by_email(email):
+	user = table_services.get_user_by_email(email)
 	if user is not None:
 		return jsonify({"user" : user}), 200
 	else :
@@ -38,8 +38,7 @@ def get_all_package():
 def create_user():
 	if not request.json:
 		abort(400)
-	user = {
-		"username" 	: request.json['username'],
+	user = {		
 		"password" 	: request.json['password'],
 		"email" 	: request.json['email'],
 		"firstname" : request.json['firstname'],
@@ -57,7 +56,7 @@ def update_user_package():
 	if not request.json:
 		abort(400)
 	data = {
-		"username" 	: request.json['username'],
+		"email" 	: request.json['email'],
 		"password" 	: request.json['password'],
 		"package" 	: request.json['package']			
 	}	
@@ -73,9 +72,9 @@ def update_user_package():
 def user_login():
 	if not request.json:
 		abort(404)
-	username = request.json['username']
+	email = request.json['email']
 	password = request.json['password']
-	user = table_services.authenticate(username, password)
+	user = table_services.authenticate(email, password)
 	if user is not None:
 		return jsonify({"user" : user}), 200
 	else :
