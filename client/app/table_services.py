@@ -56,9 +56,10 @@ def authenticate(email, password):
 
 
 def update_user_package(data):
+	print json.dumps(data)
 	user = {"package_type" : data['package'], "package" : json.dumps(services.get_package(data['package']))}
 	try:
-		ts.update_entity(table, data['username'], data['password'],user)
+		ts.update_entity(table, partition, data['email'],user)
 		return True
 	except Exception, e:
 		return False

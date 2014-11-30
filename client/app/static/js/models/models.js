@@ -36,8 +36,8 @@
 	    setUser : function(userObj){	    		    
 	    	$.jStorage.set('firstname', userObj.firstname);
 	    	$.jStorage.set('lastname', userObj.lastname);
-	    	$.jStorage.set('password', userObj.RowKey);
-	    	$.jStorage.set('email', userObj.PartitionKey);
+	    	$.jStorage.set('password', userObj.password);
+	    	$.jStorage.set('email', userObj.RowKey);
 	    	$.jStorage.set('package', userObj.package_type);
 	    	$.jStorage.set('key', userObj.key);
 	    	$.jStorage.set('port', userObj.port);

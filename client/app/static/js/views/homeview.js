@@ -83,7 +83,7 @@
 				swal("Note!", "This is your current package");								
 			}else{
 				data = {
-					"username" : $.jStorage.get('username'),
+					"email" 	: $.jStorage.get('email'),
 					"password"	: $.jStorage.get('password'),
 					"package"	: package
 				};

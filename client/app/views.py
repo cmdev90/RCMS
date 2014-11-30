@@ -59,12 +59,12 @@ def update_user_package():
 		"email" 	: request.json['email'],
 		"password" 	: request.json['password'],
 		"package" 	: request.json['package']			
-	}	
+	}
 	
 	if table_services.update_user_package(data) :
 		return jsonify({"response": "successful"}), 201
 	else :
-		return jsonify({"response" : "error creating user"}), 400	
+		return jsonify({"response" : "error updating package"}), 400	
 
 
 

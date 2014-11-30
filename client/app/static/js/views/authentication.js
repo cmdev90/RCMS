@@ -33,8 +33,9 @@
 
 			this.model.save(this.getFormData(),{
 				success:function(model, response){
+					
 					var user = JSON.parse(response.user);					
-					that.model.setApiKey(user.PartitionKey+"_"+user.RowKey);
+					that.model.setApiKey(user.RowKey+"_"+user.password);
 					that.model.setUser(user);
 					that.show();					
 					window.location.reload();
