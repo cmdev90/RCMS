@@ -60,44 +60,44 @@ var MaintainInstance = function (key, fn) {
 
 // Go into the azure and pull this clients records. Compare the differences
 // between the running instances and what it should be on record.
-app.get('/update_package/:package/:auth/:port', function (req, res) {
-	var data = {
-		_package: req.params['package']
-		, _authKey: req.params['auth']
-		, _port: req.params['port']
-	}
+// app.get('/update_package/:package/:auth/:port', function (req, res) {
+	// var data = {
+	// 	_package: req.params['package']
+	// 	, _authKey: req.params['auth']
+	// 	, _port: req.params['port']
+	// }
 
-	// // Set up variables we are going to need
-	// var partitionKey = req.params['username']
-	// 	, rowKey = req.params['password']
-	// 	, table = 'users'
-	// 	, tableService = azure.createTableService(account_name, account_key) // by creating a new table service!
+	// Set up variables we are going to need
+	var partitionKey = 'users'
+		, rowKey = 'john@mail.com'
+		, table = 'storage'
+		, tableService = azure.createTableService(account_name, account_key) // by creating a new table service!
 
+	// Try to retrieve the entity from the the table storage.
+	tableService.retrieveEntity(table, partitionKey, rowKey, function (error, data, response){
 
-	// // Try to retrieve the entity from the the table storage.
-	// tableService.retrieveEntity(table, partitionKey, rowKey, function (error, data, response){
+		console.log(data);
+		// if(error) return res.send('Goodbye cruel world!' + error)
+		// if (data) {
+		// 	UpdateInstancePackage(data, function (error, response){
+		// 		if (error) return res.send(error)
 
-	// 	if(error) return res.send('Goodbye cruel world!' + error)
-	// 	if (data) {
-			UpdateInstancePackage(data, function (error, response){
-				if (error) return res.send(error)
+		// 		var i = 0
+		// 		for (var r in RunRecords){
+		// 			i++
+		// 		}
 
-				var i = 0
-				for (var r in RunRecords){
-					i++
-				}
+		// 		console.log(i)
 
-				console.log(i)
+		// 		return res.send("Success")
+		// 	})
+		// }
+		// return res.send('response' + response)
+	})
+// })
 
-				return res.send("Success")
-			})
-	// 	}
-	// 	// return res.send('response' + response)
-	// })
-})
-
-var port = process.env.PORT || 3000
-app.listen(port, function () {
-  console.log('Node manager listening at port %s', port)
-})
+// var port = process.env.PORT || 3000
+// app.listen(port, function () {
+//   console.log('Node manager listening at port %s', port)
+// })
 
