@@ -51,6 +51,61 @@ var hash = function(password) {
 //  Helper function!
 // ==================
 
+var containsO = function(arr, target) {
+    var flag = false
+    _.each(arr, function(object) {
+      if(_.contains(object, target))
+        flag = true;
+    });
+    return flag;
+};
+
+var disconnect = function(socket) {
+    // Broadcast removal of socket from list.
+    socket.broadcast.emit('alert', { 
+      type : FLAGS.REM,
+      cid : socket.id,
+    });
+
+    // Update the connection list.
+    _.remove(connected, function(client) {
+      return client.cid === socket.id;
+    });
+};
+
+var openChat = function(socket, data) {
+
+    if (containsO(connected, data.id)) {
+      // Generate a room name of 30 chars long.
+      var room_name = autoGen(30);
+
+      socket.broadcast.emit('alert', {
+        type : FLAGS.CREQ,
+        cid : data.id,
+        room : room_name,
+      });
+
+      socket.join(room_name);
+
+      socket.emit('alert',{
+        type : FLAGS.JOINT,
+        room : room_name,
+      });
+    } else {
+      socket.emit('err');
+    }
+};
+
+var joinRoom = function(socket, data) {
+    if(hash(data.nonce) === getNonce(socket.id)) {
+      socket.join(data.room);
+      socket.emit('alert',{
+        type : FLAGS.JOINT,
+        room : data.room,
+      });
+    };
+};
+
 var setupClient = function (socket) {
 		debug.log('Server is now setting up the client for communications');
 
@@ -102,17 +157,17 @@ var setupClient = function (socket) {
 		})
 
 		socket.on('chat', function(data) {
-			//openChat(this, data);
+			openChat(this, data);
 		});
 
 		socket.on('acknowledge', function(data) {
-			//joinRoom(this, data);
+			joinRoom(this, data);
 		});
 
 		socket.on('message', function(data) {
 			debug.log(data);
 			debug.log(this.__data__);
-			//socket.broadcast.to(data.room).emit('message', data);
+			socket.broadcast.to(data.room).emit('message', data);
 		});
 
 		socket.emit('authenticated')
