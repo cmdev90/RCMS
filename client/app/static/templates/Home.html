@@ -1,60 +1,82 @@
-<div role="tabpanel">
-
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist">
-    <li role="presentation" class="active"><a href="#your-pkg" aria-controls="your-pkg" role="tab" data-toggle="tab">Your Package</a></li>
-    <li role="presentation"><a href="#packages-list" aria-controls="packages-list" role="tab" data-toggle="tab">Choose New Package</a></li>
+<div class="col-xs-6 col-md-2" id = "rcms-nav">
+  <ul class="nav nav-pills nav-stacked">
+    <li role="presentation" class = "applications"><a href="#">Applications</a></li>                        
+    <li role="presentation" class = "package"><a href="#package">Packages</a></li>  
   </ul>
-
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="your-pkg">
-      <h2>Your Package: <%= name %></h2>
-      <h4 id="key">Access Token: </h4>
-      <h4 id="port">Port: </h4>
-      <hr>
-      <table class="table table-hover">
-        <thead>
-          <tr>              
-            <th>Features</th>
-            <th>In Package</th>                    
-          </tr>
-        </thead>
-        <tbody>     
-          <tr>
-            <td>Nodes</td>
-            <td><%= nodes %></td>
-          </tr>
-          <tr>
-            <td>Message per/min</td>
-            <td><%= messaging %></td>
-          </tr>
-          <tr>
-            <td>Concurrent Users</td>
-            <td><%= users %></td>
-          </tr>
-          <tr>
-            <td>Voice over IP</td>
-            <td><%= voice %></td>
-          </tr>
-          <tr>
-            <td>Configured Security</td>
-            <td><%= security %></td>
-          </tr>
-          <tr>
-            <td>Extensions</td>
-            <td><%= extensions %></td>
-          </tr>
-          <tr>
-            <td>Price</td>
-            <td><%= cost %></td>
-          </tr>
-        </tbody>
-      </table> 
+</div>
+<div class="col-xs-12 col-md-10" id= "rcms-body">
+  <div class="row">
+    <div class="col-md-1 col-md-offset-1">
+      <button type="button" class="btn btn-primary new-app-btn" data-toggle="modal" data-target="#appModal">Create App</button> 
     </div>
-    <div role="tabpanel" class="tab-pane" id="packages-list">
-      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
+    <div class="col-md-3 col-md-offset-1">
+      <p id="app-count">App Count: </p>
+    </div>
+  </div> 
+  <div class="row">
+    <table class="table table-hover">
+      <thead>
+        <tr>              
+          <th>Application Name</th>
+          <th>Application Type</th>
+          <th>Application ID</th>                    
+          <th>Port</th>                    
+          <th>Requests</th>                    
+          <th>Cost</th>                    
+          <!-- <th>Edit</th>                    
+          <th>Delete</th>   -->
+        </tr>
+      </thead>
+      <tbody id="rcms-app-list"> 
+      </tbody>
+    </table>
+  </div> 
+</div>
+
+
+
+<div class="modal fade" id="appModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">New App</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" role="form" id="app-form">
+          <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">Application Name</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="name" placeholder="Application Name" name="name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="apptype" class="col-sm-2 control-label">Application Type</label>
+            <div class="col-sm-10">
+              <select class="form-control" name="apptype">
+                <option value="free">Free</option>
+                <option value="basic">Basic</option>
+                <option value="premium">Premium</option>
+                <option value="enterprise">Enterprise</option>              
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="reigon" class="col-sm-2 control-label">Reigon</label>
+            <div class="col-sm-10">
+              <select class="form-control" name = "reigon" id="reigon"></select>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-offset-9">
+              <button type="submit" class="btn btn-primary">Save changes</button>            
+            </div>                          
+          </div>         
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>        
+      </div>
     </div>
   </div>
-
 </div>

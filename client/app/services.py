@@ -3,12 +3,17 @@ import random, json
 
 json_data =	open('packages.json')
 packages = json.dumps(json.load(json_data))
+location_json = open('locations.json')
+locations = json.dumps(json.load(location_json))
+
 package_free = "free"
 package_basic = "basic"
 package_premium = "premium"
 package_enterprise = "enterprise"
 counter = 4000
 
+
+# print locations
 
 def get_package(id):
     results = []
@@ -22,13 +27,13 @@ def get_package(id):
     return results
 
 
-def users_to_json(user_list):
+def list_to_json(list):
 
 	list = []
-	u = {}
-	for user in user_list:
-		u['user'] = user.__dict__
-		list.append(u)
+	l = {}
+	for l in list:
+		l['obj'] = obj.__dict__
+		list.append(l)
 	return json.dumps(list, separators=(',',':'))
 
 def get_port():

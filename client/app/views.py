@@ -2,26 +2,7 @@ from app import app
 import os
 from flask import jsonify, abort, make_response, request, url_for
 from flask.ext.httpauth import HTTPBasicAuth
-import table_services, services, json, hashlib
-
-
-@app.route('/get/user/email/<email>', methods=['GET'])
-def get_user_by_email(email):
-	user = table_services.get_user_by_email(email)
-	if user is not None:
-		return jsonify({"user" : user}), 200
-	else :
-		return jsonify({"user" : {}}), 404
-
-
-
-@app.route('/get/user/package/<package>', methods=['GET'])
-def get_user_package(package):
-	p = services.get_package(package)
-	if p is not None:
-		return jsonify({"package" : p}), 200
-	else :
-		return jsonify({"package" : {}}), 404
+import table_services, services, json, hashlib, user_services
 
 
 @app.route('/get/all/packages', methods=['GET'])
@@ -30,7 +11,73 @@ def get_all_package():
 	if p is not None:
 		return jsonify(p), 200
 	else :
-		return jsonify({"packages" : {}}), 404		
+		return jsonify({"packages" : {}}), 404	
+
+
+@app.route('/get/all/locations', methods=['GET'])
+def get_all_locations():
+	l = json.loads(services.locations)
+	if l is not None:		
+		return jsonify(l), 200
+	else :
+		return jsonify({"locations" : {}}), 404				
+
+
+# @app.route('/update/user/package', methods=['POST'])
+# def update_user_package():
+# 	if not request.json:
+# 		abort(400)
+# 	data = {
+# 		"email" 	: request.json['email'],
+# 		"password" 	: request.json['password'],
+# 		"package" 	: request.json['package']			
+# 	}	
+
+	
+# 	if table_services.update_user_package(data) :
+# 		return jsonify({"response": "successful"}), 201
+# 	else :
+# 		return jsonify({"response" : "error updating package"}), 400	
+
+
+@app.route('/get/user/applications/<partition>', methods=['GET'])
+def get_user_applications(partition):
+	a = table_services.getUserApps(partition)
+	if a is not None:
+		return jsonify({"applications" : a}), 200
+	else :
+		return jsonify({"applications" : {}}), 404
+
+
+@app.route('/save/user/app', methods=['POST'])
+def save_user_app():
+	if not request.json:
+		abort(404)
+	app = {
+		"partition" : request.json['partition'],
+		"apptype"	: request.json['apptype'],
+		"name"		: request.json['name'],
+		"reigon"	: request.json['reigon']
+	}
+	count = table_services.saveApplication(app)
+
+	if  count > -1:
+		return jsonify({"response": "successful", "count" : count}), 201
+	else :
+		return jsonify({"response" : "error saving app"}), 400
+
+
+@app.route('/user/login', methods=['POST'])		
+def user_login():
+	if not request.json:
+		abort(404)
+	email = request.json['email']
+	password = request.json['password']
+	user = user_services.authenticate(email, password)
+	if user is not None:
+		return jsonify({"user" : user}), 200
+	else :
+		return jsonify({"user" : {}}), 404
 
 
 
@@ -44,39 +91,18 @@ def create_user():
 		"firstname" : request.json['firstname'],
 		"lastname" 	: request.json['lastname']
 	}	
-	print user
-	if table_services.createUser(user) :
+	# print user
+	if user_services.createUser(user) :
 		return jsonify({"response": "successful"}), 201
 	else :
 		return jsonify({"response" : "error creating user"}), 400
 
 
-@app.route('/update/user/package', methods=['POST'])
-def update_user_package():
-	if not request.json:
-		abort(400)
-	data = {
-		"email" 	: request.json['email'],
-		"password" 	: request.json['password'],
-		"package" 	: request.json['package']			
-	}	
 
-	
-	if table_services.update_user_package(data) :
-		return jsonify({"response": "successful"}), 201
-	else :
-		return jsonify({"response" : "error updating package"}), 400	
-
-
-
-@app.route('/user/login', methods=['POST'])		
-def user_login():
-	if not request.json:
-		abort(404)
-	email = request.json['email']
-	password = request.json['password']
-	user = table_services.authenticate(email, password)
+@app.route('/get/user/email/<email>', methods=['GET'])
+def get_user_by_email(email):
+	user = user_services.get_user_by_email(email)
 	if user is not None:
 		return jsonify({"user" : user}), 200
 	else :
-		return jsonify({"user" : {}}), 404
+		return jsonify({"user" : {}}), 404		

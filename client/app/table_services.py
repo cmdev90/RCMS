@@ -1,12 +1,12 @@
-import json, random, services, hashlib
+import json, random, services, hashlib, user_services
 from azure.storage import TableService, Entity
 
 
 account_name = 'rcms'     
 account_key = '9L1kZqrgAovvt1KI3xOfRj6RxLPt+hWpAI2mfsJ3zpf6DjMCN/TqYcaCb956jYG8qELgWpv0T0Cn5OC4vCPOng=='
-table = 'storage'
+table = 'applications'
 priority = '200'
-partition = 'users'
+
 unique_sequence = services.uniqueid() # next(unique_sequence)
 
 
@@ -16,53 +16,48 @@ ts.create_table(table)
 # ts.delete_table(table)	
 
 
-def createUser(new_user):
-	user = Entity()
-	user.PartitionKey = partition #uiquely identifies a partition of entities 
-	user.RowKey = new_user["email"]
-	user.password = new_user["password"]
-	user.package_type = services.package_free 
-	user.key = str(next(unique_sequence)) 	
-	user.firstname = new_user["firstname"]
-	user.lastname = new_user["lastname"]
-	user.package = json.dumps(services.get_package(services.package_free))
-	user.port = str(services.get_port())
-	user.priority = priority	
+def saveApplication(application):
+	app = Entity()
+	app.PartitionKey = application['partition'] #uiquely identifies a partition of entities 
+	app.RowKey = str(next(unique_sequence)) 		
+	app.package_type = application['apptype']
+	app.name = application['name']
+	app.reigon = application['reigon']
+	app.port = str(services.get_port())
+	app.priority = priority	
+	app_count = user_services.user_app_count(application['partition'])
+	
 	try:
-		ts.insert_entity(table,user)
-		return True
+		if app_count >= 0 :
+			ts.insert_entity(table,app)
+			app_count+=1
+			if user_services.update_app_count(application['partition'], app_count):
+				return app_count
+			else :
+				return -1
+		# return True
 	except Exception, e:		
-		return False
+		return -1
 
 
-def get_user_by_email(email):
+
+def getUserApps(partition):	
+	list = []
 	try:
-		user = ts.get_entity(table, partition, email)	
-		return user.__dict__
+		apps = ts.query_entities(table, "PartitionKey eq '"+partition+"'")
+		for a in apps :
+			list.append(a.__dict__)	
+		return list
 	except Exception, e:
-		return None
+		return None		
 
 
-def authenticate(email, password):
-
-	try:		
-		user = ts.get_entity(table, partition, email)		
-
-		if user.password == hashlib.sha1(password).hexdigest():
-			return json.dumps(user.__dict__)
-		else :
-			return None
-		
-	except Exception, e:
-		return None	
-
-
-def update_user_package(data):
-	print json.dumps(data)
-	user = {"package_type" : data['package'], "package" : json.dumps(services.get_package(data['package']))}
-	try:
-		ts.update_entity(table, partition, data['email'],user)
-		return True
-	except Exception, e:
-		return False
+# def update_user_package(data):
+# 	print json.dumps(data)
+# 	user = {"package_type" : data['package'], "package" : json.dumps(services.get_package(data['package']))}
+# 	try:
+# 		ts.update_entity(table, partition, data['email'],user)
+# 		return True
+# 	except Exception, e:
+# 		return False
 	

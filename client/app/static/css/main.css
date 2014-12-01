@@ -4,7 +4,7 @@
    Author's custom styles
    ========================================================================== */
 
-	#content{
+	.main-container{
 		min-height: 500px;   	
 	}
 

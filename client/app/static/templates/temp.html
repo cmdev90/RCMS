@@ -1,0 +1,60 @@
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#your-pkg" aria-controls="your-pkg" role="tab" data-toggle="tab">Your Package</a></li>
+    <li role="presentation"><a href="#packages-list" aria-controls="packages-list" role="tab" data-toggle="tab">Choose New Package</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="your-pkg">
+      <h2>Your Package: <%= name %></h2>
+      <h4 id="key">Access Token: </h4>
+      <h4 id="port">Port: </h4>
+      <hr>
+      <table class="table table-hover">
+        <thead>
+          <tr>              
+            <th>Features</th>
+            <th>In Package</th>                    
+          </tr>
+        </thead>
+        <tbody>     
+          <tr>
+            <td>Nodes</td>
+            <td><%= nodes %></td>
+          </tr>
+          <tr>
+            <td>Message per/min</td>
+            <td><%= messaging %></td>
+          </tr>
+          <tr>
+            <td>Concurrent Users</td>
+            <td><%= users %></td>
+          </tr>
+          <tr>
+            <td>Voice over IP</td>
+            <td><%= voice %></td>
+          </tr>
+          <tr>
+            <td>Configured Security</td>
+            <td><%= security %></td>
+          </tr>
+          <tr>
+            <td>Extensions</td>
+            <td><%= extensions %></td>
+          </tr>
+          <tr>
+            <td>Price</td>
+            <td><%= cost %></td>
+          </tr>
+        </tbody>
+      </table> 
+    </div>
+    <div role="tabpanel" class="tab-pane" id="packages-list">
+      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true"></div>
+    </div>
+  </div>
+
+</div>

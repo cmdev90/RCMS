@@ -37,10 +37,9 @@
 	    	$.jStorage.set('firstname', userObj.firstname);
 	    	$.jStorage.set('lastname', userObj.lastname);
 	    	$.jStorage.set('password', userObj.password);
-	    	$.jStorage.set('email', userObj.RowKey);
-	    	$.jStorage.set('package', userObj.package_type);
-	    	$.jStorage.set('key', userObj.key);
-	    	$.jStorage.set('port', userObj.port);
+	    	$.jStorage.set('email', userObj.RowKey);	    	
+	    	$.jStorage.set('app_count', userObj.app_count);	    	
+	    	$.jStorage.set('partition', userObj.PartitionKey);
 	    }
 	})
 
@@ -62,29 +61,62 @@
 	    }
 	});
 
+	RCMS.Models.ApplicationModel = Backbone.Model.extend({				
+		urlRoot : '/save/user/app',
 
-	RCMS.Models.PackagesModel = Backbone.Model.extend({				
+		initialize: function(){	
+			console.log('app model');		
+		}
+	});	
+
+	// RCMS.Collections.ApplicationCollection = Backbone.Collection.extend({
+	// 	model 	: RCMS.Models.ApplicationModel,
+	// 	url 	: '/get/all/packages'
+	// });
+
+
+	RCMS.Models.LocationModel = Backbone.Model.extend({				
 
 		initialize: function(){	
 			console.log('packages model');		
 		},
 
 		defaults: {
-			"name"			: "none",
-			"nodes" 		: "none",
-			"messaging" 	: "none",
-			"note" 			: "none",
-			"users" 		: "none",
-			"voice" 		: "none",
-			"security" 		: "none",
-			"extensions" 	: "none",
-			"cost"			: "$0 US per month"	
+			"id"		: "none",
+			"name" 		: "none"	
 	    }
 	});	
 
-	RCMS.Collections.PackagesCollection = Backbone.Collection.extend({
-		model 	: RCMS.Models.PackagesModel,
-		url 	: '/get/all/packages'
+	RCMS.Collections.LocationsCollection = Backbone.Collection.extend({
+		model 	: RCMS.Models.LocationModel,
+		url 	: '/get/all/locations'
 	});
+
+
+
+
+	// RCMS.Models.PackagesModel = Backbone.Model.extend({				
+
+	// 	initialize: function(){	
+	// 		console.log('packages model');		
+	// 	},
+
+	// 	defaults: {
+	// 		"name"			: "none",
+	// 		"nodes" 		: "none",
+	// 		"messaging" 	: "none",
+	// 		"note" 			: "none",
+	// 		"users" 		: "none",
+	// 		"voice" 		: "none",
+	// 		"security" 		: "none",
+	// 		"extensions" 	: "none",
+	// 		"cost"			: "$0 US per month"	
+	//     }
+	// });	
+
+	// RCMS.Collections.PackagesCollection = Backbone.Collection.extend({
+	// 	model 	: RCMS.Models.PackagesModel,
+	// 	url 	: '/get/all/packages'
+	// });
 
 }(document, this, jQuery, Backbone, _));

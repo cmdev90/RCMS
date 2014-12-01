@@ -33,9 +33,10 @@
 
 			this.model.save(this.getFormData(),{
 				success:function(model, response){
-					
-					var user = JSON.parse(response.user);					
-					that.model.setApiKey(user.RowKey+"_"+user.password);
+					console.log(response);
+
+					var user = response.user;
+					that.model.setApiKey(user.PartitionKey+"_"+user.RowKey);
 					that.model.setUser(user);
 					that.show();					
 					window.location.reload();
@@ -62,12 +63,12 @@
 		},
 
 		hide : function(){
-			$("#rcms-body").hide();
+			$("#content").hide();
 			$("#loading").show();			
 		},
 
 		show : function(){
-			$("#rcms-body").show();
+			$("#content").show();
 			$("#loading").hide();			
 		},
 
@@ -104,17 +105,7 @@
 		},
 
 		render : function(){
-			$(this.el).html('<a id = "user_logout">Logout</a>');	              
-			// $(this.el).html('<li class="dropdown">'+
-			// 		          '<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>'+
-			// 		          '<ul class="dropdown-menu" role="menu">'+
-			// 		            '<li><a href="#">Action</a></li>'+
-			// 		            '<li><a href="#">Another action</a></li>'+
-			// 		            '<li><a href="#">Something else here</a></li>'+
-			// 		            '<li class="divider"></li>'+
-			// 		            '<li><a href="#">Separated link</a></li>'+
-			// 		          '</ul>'+
-			// 		        '</li>');	              
+			$(this.el).html('<a id = "user_logout">Logout</a>');	              	              
 
 	        return this;
 		},
@@ -130,12 +121,12 @@
 		},
 
 		hide : function(){
-			$("#rcms-body").hide();
+			$("#content").hide();
 			$("#loading").show();			
 		},
 
 		show : function(){
-			$("#rcms-body").show();
+			$("#content").show();
 			$("#loading").hide();			
 		},
 	});
@@ -198,12 +189,12 @@
 		},
 
 		hide : function(){
-			$("#rcms-body").hide();
+			$("#content").hide();
 			$("#loading").show();			
 		},
 
 		show : function(){
-			$("#rcms-body").show();
+			$("#contentx").show();
 			$("#loading").hide();			
 		}
 	});

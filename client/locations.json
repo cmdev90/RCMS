@@ -1,0 +1,19 @@
+{
+	"locations" : [
+		{"id"	:"1", "name":"Central US"},
+		{"id"	:"2", "name":"East US"},
+		{"id"	:"3", "name":"North Europe"},
+		{"id"	:"4", "name":"West Europe"},
+		{"id"	:"5", "name":"West US"},
+		{"id"	:"6", "name":"North Central US"},
+		{"id"	:"7", "name":"South Central US"},
+		{"id"	:"8", "name":"East US 2"},
+		{"id"	:"9", "name":"East Aisa"},
+		{"id"	:"10","name":"South East Aisa"},
+		{"id"	:"11","name":"Japan West"},
+		{"id"	:"12","name":"Japan East"},
+		{"id"	:"13","name":"Brazil South"},
+		{"id"	:"14","name":"Austrilia East"},
+		{"id"	:"15","name":"Austrilia East"}	
+	]
+}
