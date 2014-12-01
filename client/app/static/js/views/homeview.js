@@ -65,11 +65,13 @@
 
 		newApp : function(){
 			var app = new RCMS.Models.ApplicationModel(),
-			list = this.$el.find('#reigon');
+			list = this.$el.find('#reigon'),
+			that = this;
 
 			$('#appModal').modal("hide").on('hidden.bs.modal', function (e) {
 			  	list.html("");
 			  	$('input[type=text],input[type=password]').val('');
+			  	that.hide();
 			});
 
 
@@ -80,6 +82,7 @@
 				  	window.location.reload();				
 				},
 				error : function(model, response){
+					that.show();
 					console.log(response);								
 				}
 			});						
@@ -97,6 +100,16 @@
 				data[viewArr[i].name] = viewArr[i].value;
 			});			
 			return data;
+		},
+
+		hide : function(){
+			$("#content").hide();
+			$("#loading").show();			
+		},
+
+		show : function(){
+			$("#content").show();
+			$("#loading").hide();			
 		}
 	});
 
@@ -115,5 +128,58 @@
 
 	});
 
+
+	RCMS.Views.Package = Backbone.View.extend({
+
+		className : "row",
+
+		initialize : function(){
+			this.render();
+		},
+
+		render : function(){		
+			$(this.el).html(this.template());	
+
+			var collection = new RCMS.Collections.PackagesCollection(),
+			tabBody = this.$el.find("#package-tabs");
+			collection.fetch({
+				success : function(model, response){
+				
+					$.each(response.packages, function(index,data){						
+						$.each(data, function(i,d){														
+							$(tabBody).append(new RCMS.Views.PackageTab({model:data[i]}).el);
+						});
+					});
+				},
+				error : function(model, response){
+					console.log(response);
+				}
+			});
+			return this;
+		}
+
+	});
+
+
+
+	RCMS.Views.PackageTab = Backbone.View.extend({
+
+		className : "tab-pane",
+
+		initialize : function(){
+			this.render();
+		},
+
+		render : function(){
+			$(this.el).html(this.template(this.model));	
+			if(this.model.name === "Free"){
+				this.$el.addClass('active');
+			}
+			this.$el.attr('role', "tabpanel");
+			this.$el.attr('id',this.model.name);
+			return this;
+		}
+
+	});
 	
 }(document, this, jQuery, Backbone, _));			

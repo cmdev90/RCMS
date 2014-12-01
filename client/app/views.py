@@ -5,6 +5,17 @@ from flask.ext.httpauth import HTTPBasicAuth
 import table_services, services, json, hashlib, user_services
 
 
+
+@app.route('/get/user/package/<partition>/<rowkey>', methods=['GET'])
+def get_user_package(partition, rowkey):
+	p = table_services.get_package(partition, rowkey)
+	if p is not None:
+		return jsonify({"package" : p}), 200
+	else :
+		return jsonify({"package" : {}}), 404
+
+
+
 @app.route('/get/all/packages', methods=['GET'])
 def get_all_package():
 	p = json.loads(services.packages)
@@ -115,6 +126,6 @@ def create_user():
 def get_user_by_email(email):
 	user = user_services.get_user_by_email(email)
 	if user is not None:
-		return jsonify({"user" : user}), 200
+		return jsonify({"user" : user.__dict__}), 200
 	else :
 		return jsonify({"user" : {}}), 404		

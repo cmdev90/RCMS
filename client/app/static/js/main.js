@@ -45,8 +45,9 @@
 
 		package : function(){			
 			if($.jStorage.get('apiKey')){				
-				this.authen.selectMenuItem('package');
-				console.log('package');				
+				this.package = new RCMS.Views.Package();				
+				$("#content").html(this.package.el);
+				this.authen.selectMenuItem('package');				
 			}else{
 				this.authen = new RCMS.Views.AuthenticationView({model:new RCMS.Models.AuthenticationModel()});
 				$("#content").html(this.authen.el);
@@ -81,7 +82,8 @@
 
 	});
 
-	RCMS.templateLoader.load(["Login", "Register", "Home", "AppRow", "App", "Settings"],function () {      
+	RCMS.templateLoader.load(["Login", "Register", "Home", "PackageTab", 
+							"AppRow", "App", "Settings", "Package", "SinglePackage"],function () {      
 		$(document).ready(function(){
 			app = new RCMS.Routers.AppRouter();
 			Backbone.history.start();

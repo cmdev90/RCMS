@@ -13,6 +13,16 @@
 		render : function(){
 			$(this.el).html(this.template(this.model));	
 			return this;
+		},
+
+		hide : function(){
+			$("#content").hide();
+			$("#loading").show();			
+		},
+
+		show : function(){
+			$("#content").show();
+			$("#loading").hide();			
 		}
 
 	});
@@ -28,6 +38,24 @@
 
 		render : function(){
 			$(this.el).html(this.template(this.model));	
+			this.hide();
+			var app = new RCMS.Models.ApplicationModel(),
+			data = this.getFormData("#delete-user-app"),
+			that= this,
+			app_panel = this.$el.find("#change-app-settings");
+
+			app.url = '/get/user/package/'+ $.jStorage.get('email') +'/'+ this.model.id;
+			app.fetch({
+				success : function(model, response){
+					$(app_panel).prepend(new RCMS.Views.SinglePackage({model:response.package[0]}).el);
+					that.show();
+				},
+				error : function(model, response){
+					console.log(response);
+					that.show();
+				}
+			});
+
 			return this;
 		},
 
@@ -39,19 +67,23 @@
 
 		deleteApp : function(e){
 			var app = new RCMS.Models.ApplicationModel(),
-			data = this.getFormData("#delete-user-app");
+			data = this.getFormData("#delete-user-app"),
+			that= this;
 			app.url = '/delete/user/app/'+ data.partition +'/'+ data.appId;
 			
 			$('#deleteAppModal').modal("hide").on('hidden.bs.modal', function (e) {
 			  	$('input[type=text],input[type=password]').val('');
+			  	that.hide();
 			});
 
 			app.fetch({
 				success : function(model, response){
+					that.show();
 					$.jStorage.set('app_count', response.count);
 					window.location.hash = "";
 				},
-				error : function(model, response){									  
+				error : function(model, response){	
+					that.show();								  
 				  	swal("Oops...", "Something went wrong, Please Try again!", "error");
 					console.log(response);
 				}
@@ -62,18 +94,29 @@
 		updateApp : function(e){
 
 			var app = new RCMS.Models.ApplicationModel(),
-			data = this.getFormData("#update-user-app");
+			data = this.getFormData("#update-user-app")
+			that = this;
 			app.url = "/update/user/package";
 			
 			$('#updateAppModal').modal("hide").on('hidden.bs.modal', function (e) {
 			  	$('input[type=text],input[type=password]').val('');
+			  	that.hide();
 			});
 
 			app.save(data,{
 				success : function(model, response){
-					swal("Success", "Application Package Updated", "success");
+					that.show();					
+					swal({
+							title: "Success!!",
+							text: "Package Updated!",
+							type: "success"
+						},
+					function(){						
+						window.location.reload();							
+					});
 				},
-				error : function(model, response){									  
+				error : function(model, response){	
+					that.show();								  
 				  	swal("Oops...", "Something went wrong, Please Try again!", "error");
 					console.log(response);
 				}
@@ -93,6 +136,32 @@
 				data[viewArr[i].name] = viewArr[i].value;
 			});			
 			return data;
+		},
+
+		hide : function(){
+			$("#content").hide();
+			$("#loading").show();			
+		},
+
+		show : function(){
+			$("#content").show();
+			$("#loading").hide();			
+		}
+
+	});
+
+
+	RCMS.Views.SinglePackage = Backbone.View.extend({
+
+		className : "col-xs-6 col-md-6",
+
+		initialize : function(){
+			this.render();
+		},
+
+		render : function(){
+			$(this.el).html(this.template(this.model));	
+			return this;
 		}
 
 	});

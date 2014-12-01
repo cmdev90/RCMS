@@ -4,7 +4,8 @@
     <li role="presentation" class = "settings"><a href="#app/settings/<%= id %>">Settings</a></li>  
   </ul>
 </div>
-<div class="col-xs-12 col-md-10" id= "rcms-body-app">
+
+<div class="col-xs-12 col-md-9 col-md-offset-1" id= "rcms-body-app">
 	<div class="row">
 		<div class="col-xs-6 col-md-6">
 			<h4>Application ID</h4>
@@ -12,12 +13,12 @@
 		</div>		
 	</div>
 	<hr>
-	<div class="row">
-		<div class="col-xs-6 col-md-6">
+	<div class="row" id="change-app-settings">
+		<div class="col-xs-6 col-md-5 col-md-offset-1">
 			<h4>Change your Application settings</h4>
 			<p>Chang aplication setting by changing the type of package choosen</p>
 			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#updateAppModal">Change Settings</button>
-		</div>		
+		</div>			
 	</div>
 	<hr>
 	<div class="row">
@@ -85,7 +86,7 @@
 		    <button type="submit" class="btn btn-default">Confirm</button>
 		  </div>
 		   <div class="form-group">
-		    <a href="#packages" target="_blank">Learn More...</a>
+		    <a href="#package" target="_blank">Learn More...</a>
 		  </div>
 		  <input type="text" class="form-control" id="rowkey" name= "rowkey" value="<%= id %>" style="display:none;">		     
 		</form>

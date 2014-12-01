@@ -69,10 +69,6 @@
 		}
 	});	
 
-	// RCMS.Collections.ApplicationCollection = Backbone.Collection.extend({
-	// 	model 	: RCMS.Models.ApplicationModel,
-	// 	url 	: '/get/all/packages'
-	// });
 
 
 	RCMS.Models.LocationModel = Backbone.Model.extend({				
@@ -95,28 +91,29 @@
 
 
 
-	// RCMS.Models.PackagesModel = Backbone.Model.extend({				
+	RCMS.Models.PackagesModel = Backbone.Model.extend({						
 
-	// 	initialize: function(){	
-	// 		console.log('packages model');		
-	// 	},
+		initialize: function(){	
+			console.log('packages model');		
+		},
 
-	// 	defaults: {
-	// 		"name"			: "none",
-	// 		"nodes" 		: "none",
-	// 		"messaging" 	: "none",
-	// 		"note" 			: "none",
-	// 		"users" 		: "none",
-	// 		"voice" 		: "none",
-	// 		"security" 		: "none",
-	// 		"extensions" 	: "none",
-	// 		"cost"			: "$0 US per month"	
-	//     }
-	// });	
+		defaults: {
+			"name"					: "Free",
+			"transactions_per_day" 	: "100,000",
+			"chat_type" 			: "Broadcast",
+			"note" 					: "The free package allows for up to 100, 00 free transaction per day, if the amount is exceeded the client is free to per per extra transaction a fee of $0.002 or upgrade to another package.",
+			"users" 				: "20",
+			"chatroom" 				: "no",
+			"privatechat" 			: "no",
+			"extras" 				: "Increased Transactions",
+			"cost"					: "$0 US per month",
+			"exceeded_cost"			: "$0.002 US per transaction"	
+	    }
+	});	
 
-	// RCMS.Collections.PackagesCollection = Backbone.Collection.extend({
-	// 	model 	: RCMS.Models.PackagesModel,
-	// 	url 	: '/get/all/packages'
-	// });
+	RCMS.Collections.PackagesCollection = Backbone.Collection.extend({
+		model 	: RCMS.Models.PackagesModel,
+		url 	: '/get/all/packages'
+	});
 
 }(document, this, jQuery, Backbone, _));

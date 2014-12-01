@@ -50,22 +50,12 @@ def authenticate(email, password):
 def get_user_by_email(email):
 	try:
 		user = ts.get_entity(table, partition, email)	
-		return user.__dict__
+		return user
 	except Exception, e:
 		return None		
 
-
-def user_app_count(email):
-
+def update_user(email, user):
 	try:		
-		user = ts.get_entity(table, partition, email)				
-		return int(user.app_count)
-	except Exception, e:
-		return -1		
-
-def update_app_count(email, app_count):
-	try:
-		user = {"app_count" : str(app_count)}
 		ts.update_entity(table, partition, email ,user)
 		return True
 	except Exception, e:		

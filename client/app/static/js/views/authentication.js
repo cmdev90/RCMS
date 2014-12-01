@@ -73,7 +73,7 @@
 		},
 
 		selectMenuItem: function (menuItem) {
-	        $('.nav li').removeClass('active');
+	        $('.nav-pills li').removeClass('active');
 	        if (menuItem) {
 	            $('.' + menuItem).addClass('active');
 	        }
@@ -171,7 +171,15 @@
 				error : function(model, response){
 					console.log(response);
 					that.show();
-					swal("Oops...", "Something went wrong, Please Try again!", "error");
+					swal({
+							title: "Oops...",
+							text: "Something went wrong, Please Try again!",
+							type: "error"
+						},
+					function(){
+						window.location.reload();	
+					});	
+										
 				}
 			});
 			$('input[type=text],input[type=password]').val('');
