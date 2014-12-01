@@ -71,23 +71,36 @@
 			that= this;
 			app.url = '/delete/user/app/'+ data.partition +'/'+ data.appId;
 			
-			$('#deleteAppModal').modal("hide").on('hidden.bs.modal', function (e) {
-			  	$('input[type=text],input[type=password]').val('');
-			  	that.hide();
-			});
+			if(!_.isEmpty(data)){
 
-			app.fetch({
-				success : function(model, response){
-					that.show();
-					$.jStorage.set('app_count', response.count);
-					window.location.hash = "";
-				},
-				error : function(model, response){	
-					that.show();								  
-				  	swal("Oops...", "Something went wrong, Please Try again!", "error");
-					console.log(response);
-				}
-			});
+				$('#deleteAppModal').modal("hide").on('hidden.bs.modal', function (e) {
+				  	$('input[type=text],input[type=password]').val('');
+				  	that.hide();
+				});
+
+				app.fetch({
+					success : function(model, response){
+						that.show();
+						$.jStorage.set('app_count', response.count);
+						window.location.hash = "";
+					},
+					error : function(model, response){	
+						console.log(response);
+						that.show();
+						swal({
+								title: "Oops...",
+								text: "Something went wrong, Please Try again!",
+								type: "error"
+							},
+						function(){
+							window.location.reload();	
+						});	
+
+					}
+				});
+			}else{
+				swal("Oops...", "Looks Like You Left Some Fields Empty", "warning");
+			}
 			return false;
 		},
 
@@ -95,33 +108,47 @@
 
 			var app = new RCMS.Models.ApplicationModel(),
 			data = this.getFormData("#update-user-app")
-			that = this;
+			that = this,
+			curr_package = $("#package-type").html().toLowerCase();
 			app.url = "/update/user/package";
-			
-			$('#updateAppModal').modal("hide").on('hidden.bs.modal', function (e) {
-			  	$('input[type=text],input[type=password]').val('');
-			  	that.hide();
-			});
+			console.log($("#package-type").html().toLowerCase() +" "+data.package_type);
 
-			app.save(data,{
-				success : function(model, response){
-					that.show();					
-					swal({
-							title: "Success!!",
-							text: "Package Updated!",
-							type: "success"
-						},
-					function(){						
-						window.location.reload();							
-					});
-				},
-				error : function(model, response){	
-					that.show();								  
-				  	swal("Oops...", "Something went wrong, Please Try again!", "error");
-					console.log(response);
-				}
-			});
-			
+			if(curr_package !== data.package_type){
+
+				$('#updateAppModal').modal("hide").on('hidden.bs.modal', function (e) {
+				  	$('input[type=text],input[type=password]').val('');
+				  	that.hide();
+				});
+
+				app.save(data,{
+					success : function(model, response){
+						that.show();					
+						swal({
+								title: "Success!!",
+								text: "Package Updated!",
+								type: "success"
+							},
+						function(){						
+							window.location.reload();							
+						});
+					},
+					error : function(model, response){	
+						console.log(response);
+						that.show();
+						swal({
+								title: "Oops...",
+								text: "Something went wrong, Please Try again!",
+								type: "error"
+							},
+						function(){
+							window.location.reload();	
+						});	
+					}
+				});
+			}else{
+				swal("Oops...", "Looks Like You Have Choosen Your Current Package", "warning");
+			}
+
 			return false;
 		},
 
@@ -130,12 +157,18 @@
 				"partition" : $.jStorage.get("email")
 			},
 			form = this.$el.find(id),
+			viewArr = form.serializeArray(),
+			valid = true;			
 
-			viewArr = form.serializeArray();			
 			$.each(viewArr, function(i,d){
 				data[viewArr[i].name] = viewArr[i].value;
-			});			
-			return data;
+				if(viewArr[i].value === "") valid = false;
+			});		
+			if(valid){
+				return data;
+			}else{
+				return {};
+			}
 		},
 
 		hide : function(){

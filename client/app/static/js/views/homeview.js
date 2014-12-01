@@ -66,26 +66,31 @@
 		newApp : function(){
 			var app = new RCMS.Models.ApplicationModel(),
 			list = this.$el.find('#reigon'),
-			that = this;
+			that = this,
+			data = this.getFormData();
+			if(!_.isEmpty(data)){
 
-			$('#appModal').modal("hide").on('hidden.bs.modal', function (e) {
-			  	list.html("");
-			  	$('input[type=text],input[type=password]').val('');
-			  	that.hide();
-			});
+				$('#appModal').modal("hide").on('hidden.bs.modal', function (e) {
+				  	list.html("");
+				  	$('input[type=text],input[type=password]').val('');
+				  	that.hide();
+				});
 
 
-			app.save(this.getFormData(),{
-				success:function(model, response){
-					console.log(response);														
-				  	$.jStorage.set('app_count', response.count);					  	
-				  	window.location.reload();				
-				},
-				error : function(model, response){
-					that.show();
-					console.log(response);								
-				}
-			});						
+				app.save(data,{
+					success:function(model, response){
+						console.log(response);														
+					  	$.jStorage.set('app_count', response.count);					  	
+					  	window.location.reload();				
+					},
+					error : function(model, response){
+						that.show();
+						console.log(response);								
+					}
+				});	
+			}else{
+				swal("Oops...", "Looks Like You Left Some Fields Empty", "warning");
+			}					
 			return false;
 		},
 
@@ -94,12 +99,18 @@
 				"partition" : $.jStorage.get("email"),				
 			},
 			form = this.$el.find("#app-form"),
+			viewArr = form.serializeArray(),
+			valid = true;			
 
-			viewArr = form.serializeArray();			
 			$.each(viewArr, function(i,d){
 				data[viewArr[i].name] = viewArr[i].value;
-			});			
-			return data;
+				if(viewArr[i].value === "") valid = false;
+			});		
+			if(valid){
+				return data;
+			}else{
+				return {};
+			}
 		},
 
 		hide : function(){

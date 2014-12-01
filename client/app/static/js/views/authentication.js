@@ -26,40 +26,51 @@
 		},
 
 		authen : function(){	
-			var that = this;
+			var that = this,
+			data = this.getFormData();
+			if(!_.isEmpty(data)){
+				this.hide();
+				this.model.url = "/user/login";
+
+				this.model.save(data,{
+					success:function(model, response){
+						console.log(response);
+
+						var user = response.user;
+						that.model.setApiKey(user.PartitionKey+"_"+user.RowKey);
+						that.model.setUser(user);
+						that.show();					
+						window.location.reload();
+					},
+					error : function(model, response){
+						console.log(response);
+						that.show();
+						swal("Oops...", "Something went wrong, Please Try again!", "error");
+					}
+				});
+				$('input[type=text],input[type=password]').val('');	
+			}else{
+				swal("Oops...", "Looks Like You Left Some Fields Empty", "warning");
+			}
 			
-			this.hide();
-			this.model.url = "/user/login";
-
-			this.model.save(this.getFormData(),{
-				success:function(model, response){
-					console.log(response);
-
-					var user = response.user;
-					that.model.setApiKey(user.PartitionKey+"_"+user.RowKey);
-					that.model.setUser(user);
-					that.show();					
-					window.location.reload();
-				},
-				error : function(model, response){
-					console.log(response);
-					that.show();
-					swal("Oops...", "Something went wrong, Please Try again!", "error");
-				}
-			});
-			$('input[type=text],input[type=password]').val('');
 			return false;
 		},		
 
 		getFormData : function(){			
 			var data = {},
 			form = this.$el.find("#login"),
+			viewArr = form.serializeArray(),
+			valid = true;			
 
-			viewArr = form.serializeArray();			
 			$.each(viewArr, function(i,d){
 				data[viewArr[i].name] = viewArr[i].value;
-			});			
-			return data;
+				if(viewArr[i].value === "") valid = false;
+			});		
+			if(valid){
+				return data;
+			}else{
+				return {};
+			}
 		},
 
 		hide : function(){
@@ -150,51 +161,63 @@
 		},
 
 		register : function(){	
-			var that = this;
+			var that = this,
+			data = this.getFormData();
 			
-			this.hide();			
+			if(!_.isEmpty(data)){
+				this.hide();			
 
-			this.model.save(this.getFormData(),{
-				success:function(model, response){
-					console.log(response);
-					that.show();	
-					swal({
-							title: "Success!!",
-							text: "Your Account has been created, Prepare for Awesomeness!",
-							type: "success"
-						},
-					function(){
-						window.location.hash = "";	
-						window.location.reload();							
-					});				
-				},
-				error : function(model, response){
-					console.log(response);
-					that.show();
-					swal({
-							title: "Oops...",
-							text: "Something went wrong, Please Try again!",
-							type: "error"
-						},
-					function(){
-						window.location.reload();	
-					});	
-										
-				}
-			});
-			$('input[type=text],input[type=password]').val('');
+				this.model.save(data,{
+					success:function(model, response){
+						console.log(response);
+						that.show();	
+						swal({
+								title: "Success!!",
+								text: "Your Account has been created, Prepare for Awesomeness!",
+								type: "success"
+							},
+						function(){
+							window.location.hash = "";	
+							window.location.reload();							
+						});				
+					},
+					error : function(model, response){
+						console.log(response);
+						that.show();
+						swal({
+								title: "Oops...",
+								text: "Something went wrong, Please Try again!",
+								type: "error"
+							},
+						function(){
+							window.location.reload();	
+						});	
+											
+					}
+				});
+				$('input[type=text],input[type=password]').val('');
+			}else{
+				swal("Oops...", "Looks Like You Left Some Fields Empty", "warning");
+			}
+			
 			return false;
 		},		
 
 		getFormData : function(){			
 			var data = {},
 			form = this.$el.find("#reg"),
+			viewArr = form.serializeArray(),
+			valid = true;			
 
-			viewArr = form.serializeArray();			
 			$.each(viewArr, function(i,d){
 				data[viewArr[i].name] = viewArr[i].value;
-			});			
-			return data;
+				if(viewArr[i].value === "") valid = false;
+			});		
+			if(valid){
+				return data;
+			}else{
+				return {};
+			}
 		},
 
 		hide : function(){
