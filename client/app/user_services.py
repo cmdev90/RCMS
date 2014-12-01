@@ -13,7 +13,7 @@ ts = TableService(account_name = account_name, account_key = account_key)
 ts.create_table(table)
 
 # ts.delete_table(table)
-	
+
 def createUser(new_user):
 	user = Entity()
 	user.PartitionKey = partition
@@ -22,11 +22,13 @@ def createUser(new_user):
 	user.firstname = new_user["firstname"]
 	user.lastname = new_user["lastname"]	
 	user.priority = priority	
-	user.app_count = str(0)
+	user.app_count = str(0)	
+
 	try:
 		ts.insert_entity(table,user)
 		return True
-	except Exception, e:		
+	except Exception, e:	
+		print e	
 		return False
 
 
@@ -41,6 +43,7 @@ def authenticate(email, password):
 			return None
 		
 	except Exception, e:
+		print e
 		return None			
 
 

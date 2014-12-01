@@ -23,21 +23,21 @@ def get_all_locations():
 		return jsonify({"locations" : {}}), 404				
 
 
-# @app.route('/update/user/package', methods=['POST'])
-# def update_user_package():
-# 	if not request.json:
-# 		abort(400)
-# 	data = {
-# 		"email" 	: request.json['email'],
-# 		"password" 	: request.json['password'],
-# 		"package" 	: request.json['package']			
-# 	}	
+@app.route('/update/user/package', methods=['POST'])
+def update_user_package():
+	if not request.json:
+		abort(400)
+	data = {
+		"rowkey" 		: request.json['rowkey'],
+		"partition" 	: request.json['partition'],
+		"package_type" 	: request.json['package_type']			
+	}	
 
 	
-# 	if table_services.update_user_package(data) :
-# 		return jsonify({"response": "successful"}), 201
-# 	else :
-# 		return jsonify({"response" : "error updating package"}), 400	
+	if table_services.update_user_package(data) :
+		return jsonify({"response": "successful"}), 201
+	else :
+		return jsonify({"response" : "error updating package"}), 400	
 
 
 @app.route('/get/user/applications/<partition>', methods=['GET'])
@@ -67,6 +67,17 @@ def save_user_app():
 		return jsonify({"response" : "error saving app"}), 400
 
 
+@app.route('/delete/user/app/<partition>/<rowkey>', methods=['GET'])
+def delete_user_app(partition, rowkey):
+
+	count = table_services.delete_user_app(partition, rowkey)
+
+	if  count > -1:
+		return jsonify({"response": "successful", "count" : count}), 201
+	else :
+		return jsonify({"response" : "error saving app"}), 400
+
+
 @app.route('/user/login', methods=['POST'])		
 def user_login():
 	if not request.json:
@@ -74,6 +85,7 @@ def user_login():
 	email = request.json['email']
 	password = request.json['password']
 	user = user_services.authenticate(email, password)
+
 	if user is not None:
 		return jsonify({"user" : user}), 200
 	else :

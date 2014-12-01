@@ -25,6 +25,8 @@ def saveApplication(application):
 	app.reigon = application['reigon']
 	app.port = str(services.get_port())
 	app.priority = priority	
+	app.requests = str(0)
+	app.cost = str(0)
 	app_count = user_services.user_app_count(application['partition'])
 	
 	try:
@@ -52,12 +54,28 @@ def getUserApps(partition):
 		return None		
 
 
-# def update_user_package(data):
-# 	print json.dumps(data)
-# 	user = {"package_type" : data['package'], "package" : json.dumps(services.get_package(data['package']))}
-# 	try:
-# 		ts.update_entity(table, partition, data['email'],user)
-# 		return True
-# 	except Exception, e:
-# 		return False
+def delete_user_app(partition, rowkey):
+	app_count = user_services.user_app_count(partition)
+		
+	try:
+		if app_count > 0:	
+			ts.delete_entity(table, partition, rowkey)	
+			app_count-=1
+			if user_services.update_app_count(partition, app_count):
+				return app_count
+			else :
+				return -1
+	except Exception, e:
+		print e
+		return -1
+		
+
+def update_user_package(data):
+	print json.dumps(data)
+	package = {"package_type" : data['package_type']}
+	try:
+		ts.update_entity(table, data['partition'], data['rowkey'],package)
+		return True
+	except Exception, e:
+		return False
 	

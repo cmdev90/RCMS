@@ -164,7 +164,8 @@
 							type: "success"
 						},
 					function(){
-						window.location.hash = "";								
+						window.location.hash = "";	
+						window.location.reload();							
 					});				
 				},
 				error : function(model, response){

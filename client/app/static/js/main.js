@@ -5,21 +5,18 @@
 	RCMS.Routers.AppRouter = Backbone.Router.extend({
 
 		routes: {
-			"" 			: "applications",			
-			"package"	: "package",
-			"register"	: "register"
+			"" 					: "applications",			
+			"package"			: "package",
+			"register"			: "register",
+			"app/stats/:id"		: "app_page",
+			"app/settings/:id"	: "app_settings"
 		},
 
 		initialize : function(){
 			console.log("initialize");	
 			this.authen = new RCMS.Views.AuthenticationView({model:new RCMS.Models.AuthenticationModel()});
-			if($.jStorage.get('apiKey')){
-
-				window.location.hash = "";
-
-			}else{
-				$("#content").html(this.authen.el);	
-			}				
+		
+			$("#content").html(this.authen.el);			
 		},
 
 		applications : function(){	
@@ -28,22 +25,7 @@
 				
 				this.home = new RCMS.Views.Home();				
 				$("#content").html(this.home.el);
-				this.authen.selectMenuItem('applications');
-				// this.defaultPackage = new RCMS.Models.PackagesModel();
-				// this.defaultPackage.url = '/get/user/package/'+ $.jStorage.get('package');
-
-				// this.defaultPackage.fetch({
-				// 	success : function(model, response){																											
-				// 		$.each(response.package, function(i, data){
-				// 			this.home = new RCMS.Views.Home({model:data});
-				// 			$("#rcms-body").html(this.home.el);	
-				// 		});						
-				// 	},
-				// 	error : function(model, response){
-				// 		console.log(response);				
-				// 	}
-				// });
-				
+				this.authen.selectMenuItem('applications');				
 
 			}else{
 
@@ -67,13 +49,39 @@
 				console.log('package');				
 			}else{
 				this.authen = new RCMS.Views.AuthenticationView({model:new RCMS.Models.AuthenticationModel()});
-				$("#rcms-body").html(this.authen.el);
+				$("#content").html(this.authen.el);
+			}
+		},
+
+		app_page : function(id){
+			if($.jStorage.get('apiKey')){	
+				this.app = new RCMS.Views.App({model:{"id":id}});				
+				$("#content").html(this.app.el);
+
+				this.authen.selectMenuItem('stats');
+				// console.log('package');				
+			}else{
+				this.authen = new RCMS.Views.AuthenticationView({model:new RCMS.Models.AuthenticationModel()});
+				$("#content").html(this.authen.el);
+			}
+		},
+
+		app_settings : function(id){
+			if($.jStorage.get('apiKey')){	
+				this.settings = new RCMS.Views.Settings({model:{"id":id}});				
+				$("#content").html(this.settings.el);
+
+				this.authen.selectMenuItem('settings');
+					
+			}else{
+				this.authen = new RCMS.Views.AuthenticationView({model:new RCMS.Models.AuthenticationModel()});
+				$("#content").html(this.authen.el);
 			}
 		}
 
 	});
 
-	RCMS.templateLoader.load(["Login", "Register", "Home", "Package", "AppRow"],function () {      
+	RCMS.templateLoader.load(["Login", "Register", "Home", "AppRow", "App", "Settings"],function () {      
 		$(document).ready(function(){
 			app = new RCMS.Routers.AppRouter();
 			Backbone.history.start();
