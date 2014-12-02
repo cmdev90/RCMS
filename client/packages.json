@@ -5,13 +5,14 @@
 					"name"					: "Free",
 					"transactions_per_day" 	: "100,000",
 					"chat_type" 			: "Broadcast",
-					"note" 					: "The free package allows for up to 100, 00 free transaction per day, if the amount is exceeded the client is free to per per extra transaction a fee of $0.002 or upgrade to another package.",
+					"note" 					: "The free package allows for up to 100, 00 free transaction per day, if the amount is exceeded the client will pay a fee per extra transaction a fee of $0.002 per kb for incoming and $0.005 per kb for outgoing transmissions or upgrade to another package.",
 					"users" 				: "20",
 					"chatroom" 				: "no",
 					"privatechat" 			: "no",
 					"extras" 				: "Increased Transactions",
 					"cost"					: "$0 US per month",
-					"exceeded_cost"			: "$0.002 US per transaction"
+					"incoming"				: "$0.002 US per kb",
+					"outgoing" 				: "$0.005 US per kb"
 
 				}
 		},
@@ -20,13 +21,14 @@
 					"name"					: "Basic",
 					"transactions_per_day" 	: "500,000",
 					"chat_type" 			: "Broadcast",
-					"note" 					: "The basic package allows for up to 500, 00 transaction per day, if the amount is exceeded the client is free to per per extra transaction a fee of $0.001 or upgrade to another package.",
+					"note" 					: "The basic package allows for up to 500, 00 transaction per day, if the amount is exceeded the client will pay a fee per extra transaction a fee of $0.001 per kb for incoming and $0.003 per kb for outgoing transmission or upgrade to another package.",
 					"users" 				: "50",
 					"chatroom" 				: "no",
 					"privatechat" 			: "no",
 					"extras" 				: "Increased Transactions",
 					"cost"					: "$10 US per month",
-					"exceeded_cost"			: "$0.001 US per transaction"
+					"incoming"				: "$0.001 US per kb",
+					"outgoing" 				: "$0.003 US per kb"
 
 				}
 		},
@@ -35,13 +37,14 @@
 					"name"					: "Premium",
 					"transactions_per_day" 	: "1,000,000",
 					"chat_type" 			: "Broadcast/ Private Chat Roms",
-					"note" 					: "The premium package allows for up to 1, 000, 00 transaction per day for 100 concurrent users, if the amount is exceeded the client is free to per per extra transaction a fee of $0.001 per transaction and $0.002 per added users or upgrade to another package.",
+					"note" 					: "The premium package allows for up to 1, 000, 00 transaction per day for 100 users, if the amount is exceeded the client will pay a fee per extra transaction a fee of $0.001 per kb for incoming and $0.002 per kb for outgoing transmission or upgrade to another package.",
 					"users" 				: "100",
 					"chatroom" 				: "yes",
 					"privatechat" 			: "yes",
 					"extras" 				: "Increased Transactions/Users",
 					"cost"					: "$20 US per month",
-					"exceeded_cost"			: "$0.001 US per transaction/ $0.002 US per added user"
+					"incoming"				: "$0.001 US per kb",
+					"outgoing" 				: "$0.002 US per kb"
 
 				}
 		},
@@ -50,13 +53,14 @@
 					"name"					: "Enterprise",
 					"transactions_per_day" 	: "Unlimited",
 					"chat_type" 			: "Broadcast/ Private Chat Roms",
-					"note" 					: "The enerprise package allows for unlimited transaction per day for 200 concurrent users, if the amount of concurrent users needs to be increased the client will be charged $0.002 per added user. The client is also free to reduce the packaged if the neede arises",
+					"note" 					: "The enerprise package allows for unlimited transaction per day for 200 users with unlimited users and transmissions",
 					"users" 				: "2000",
 					"chatroom" 				: "yes",
 					"privatechat" 			: "yes",
 					"extras" 				: "Increased Users",
 					"cost"					: "$50 US per month",
-					"exceeded_cost"			: "$0.002 US per transaction"
+					"incoming"				: "none",
+					"outgoing" 				: "none"
 
 				}
 		}

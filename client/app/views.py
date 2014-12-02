@@ -1,5 +1,5 @@
 from app import app
-import os
+import os, datetime
 from flask import jsonify, abort, make_response, request, url_for
 from flask.ext.httpauth import HTTPBasicAuth
 import table_services, services, json, hashlib, user_services, app_services
@@ -19,13 +19,27 @@ def get_user_package(partition, rowkey):
 def get_user_app_usage(partition):
 	usage = app_services.get_usages_by_app(partition)
 	list = []
+	temp = 1
 	if usage is not None:
 		for u in usage:
+
+			s = str(u.RowKey)
+			t = datetime.datetime.fromtimestamp(float(s)/1000.)
+			fmt = "%Y-%m-%d %H:%M:%S"
+			u.timestamp = t.strftime(fmt)
+			# if temp == 1:
+			# 	u.transmission = "outgoing"
+			# 	temp = 0
+			# else :
+			# 	temp = 1
+
 			list.append(u.__dict__)
 
 		return jsonify({"usage" : list}), 200
 	else :
 		return jsonify({"packages" : {}}), 404
+
+
 
 
 @app.route('/get/all/packages', methods=['GET'])

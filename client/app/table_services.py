@@ -19,7 +19,8 @@ ts.create_table(table)
 def saveApplication(application):
 	app = Entity()
 	app.PartitionKey = application['partition'] #uiquely identifies a partition of entities 
-	app.RowKey = str(next(unique_sequence)) 		
+	app.RowKey = str(next(unique_sequence)) 	
+	# app.RowKey = "kjlhajkdlhfjhasdnfasdkjflnasdf"	
 	app.package_type = application['apptype']
 	app.name = application['name']
 	app.reigon = application['reigon']
@@ -48,12 +49,10 @@ def saveApplication(application):
 
 
 def getUserApps(partition):	
-	list = []
+	
 	try:
-		apps = update_cost_requests(partition)
-		for a in apps :			
-			list.append(a.__dict__)	
-		return list
+		apps = update_cost_requests(partition)	
+		return apps
 	except Exception, e:
 		return None		
 
@@ -110,6 +109,7 @@ def get_package(partition, rowkey):
 
 
 def update_cost_requests(partition):
+	list = []
 	try:
 		
 		apps = ts.query_entities(table, "PartitionKey eq '"+partition+"'")
@@ -121,8 +121,8 @@ def update_cost_requests(partition):
 				a.cost = temp['cost']
 				a.requests = temp['requests']
 				ts.update_entity(table, partition, a.RowKey,a)
-		apps = ts.query_entities(table, "PartitionKey eq '"+partition+"'")
-		return apps	
+			list.append(a.__dict__)
+		return list	
 	except Exception, e:
 		print e
 		return None

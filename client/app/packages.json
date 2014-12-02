@@ -2,57 +2,65 @@
 	"packages" : [
 		{
 			"free" : {
-					"name"			: "Free",
-					"nodes" 		: "2",
-					"messaging" 	: "min 100m/m",
-					"note" 			: "The free package comes with a minimum of 2 nodes. With these 2 nodes, there is a guarantee of a minimum of 100 concurrent messages per minute(m/m) and supports at most 1000 users. The free package does not come with voice over ip for voice calls, security configurations and no extensions. To enable any feature not offered in the free package, you simply have to upgrade to one of our other packages.",
-					"users" 		: "1000",
-					"voice" 		: "none",
-					"security" 		: "none",
-					"extensions" 	: "none",
-					"cost"			: "$0 US per month"
+					"name"					: "Free",
+					"transactions_per_day" 	: "100,000",
+					"chat_type" 			: "Broadcast",
+					"note" 					: "The free package allows for up to 100, 00 free transaction per day, if the amount is exceeded the client will pay a fee per extra transaction a fee of $0.002 per kb for incoming and $0.005 per kb for outgoing transmissions or upgrade to another package.",
+					"users" 				: "20",
+					"chatroom" 				: "no",
+					"privatechat" 			: "no",
+					"extras" 				: "Increased Transactions",
+					"cost"					: "$0 US per month",
+					"incoming"				: "$0.002 US per kb",
+					"outgoing" 				: "$0.005 US per kb"
 
 				}
 		},
 		{
 			"basic" : {
-					"name"			: "Basic",
-					"nodes" 		: "8",
-					"messaging" 	: "min 200m/m",
-					"note" 			: "The basic package comes with a minimum of 4 nodes. With these 4 nodes, there is a guarantee of a minimum of 200 concurrent messages per minute(m/m) and supports at most 10000 users. The free package does not come with voice over ip for voice calls, security configurations and supports basic extensions. To enable any feature not offered in the basic package, you simply have to upgrade to one of our other packages.",
-					"users" 		: "10000",
-					"voice" 		: "none",
-					"security" 		: "none",
-					"extensions" 	: "basic",
-					"cost"			: "$10 US per month"
+					"name"					: "Basic",
+					"transactions_per_day" 	: "500,000",
+					"chat_type" 			: "Broadcast",
+					"note" 					: "The basic package allows for up to 500, 00 transaction per day, if the amount is exceeded the client will pay a fee per extra transaction a fee of $0.001 per kb for incoming and $0.003 per kb for outgoing transmission or upgrade to another package.",
+					"users" 				: "50",
+					"chatroom" 				: "no",
+					"privatechat" 			: "no",
+					"extras" 				: "Increased Transactions",
+					"cost"					: "$10 US per month",
+					"incoming"				: "$0.001 US per kb",
+					"outgoing" 				: "$0.003 US per kb"
 
 				}
 		},
 		{
 			"premium" : {
-					"name"			: "Premium",
-					"nodes" 		: "16",
-					"messaging" 	: "min 1000m/m",
-					"note" 			: "The premium package comes with a minimum of 16 nodes. With these 16 nodes, there is a guarantee of a minimum of 1000 concurrent messages per minute(m/m) and supports unlimited users. The premium package supports unlimited voice over ip for voice calls, security configurations and extensions. To disable any feature offered in the premium package, you simply have to downgrade to one of our other packages.",
-					"users" 		: "unlimited",
-					"voice" 		: "unlimited",
-					"security" 		: "unlimited",
-					"extensions" 	: "unlimited",
-					"cost"			: "$30 US per month"
+					"name"					: "Premium",
+					"transactions_per_day" 	: "1,000,000",
+					"chat_type" 			: "Broadcast/ Private Chat Roms",
+					"note" 					: "The premium package allows for up to 1, 000, 00 transaction per day for 100 users, if the amount is exceeded the client will pay a fee per extra transaction a fee of $0.001 per kb for incoming and $0.002 per kb for outgoing transmission or upgrade to another package.",
+					"users" 				: "100",
+					"chatroom" 				: "yes",
+					"privatechat" 			: "yes",
+					"extras" 				: "Increased Transactions/Users",
+					"cost"					: "$20 US per month",
+					"incoming"				: "$0.001 US per kb",
+					"outgoing" 				: "$0.002 US per kb"
 
 				}
 		},
 		{
 			"enterprise" : {
-					"name"			: "Enterprise",
-					"nodes" 		: "unlimited",
-					"messaging" 	: "unlimited m/m",
-					"note" 			: "The enterprise package comes with a minimum of unlimited nodes. As many nodes as you need will be provided on demand. With these 16 nodes, the guarantee is unlimite concurrent messages per minute(m/m) and supports unlimited users. The enterprise package supports unlimited voice over ip for voice calls, security configurations and extensions. To disable any feature offered in the enterprise package, you simply have to downgrade to one of our other packages.",
-					"users" 		: "unlimited",
-					"voice" 		: "unlimited",
-					"security" 		: "unlimited",
-					"extensions" 	: "unlimited",
-					"cost"			: "$100 US per month"
+					"name"					: "Enterprise",
+					"transactions_per_day" 	: "Unlimited",
+					"chat_type" 			: "Broadcast/ Private Chat Roms",
+					"note" 					: "The enerprise package allows for unlimited transaction per day for 200 users with unlimited users and transmissions",
+					"users" 				: "2000",
+					"chatroom" 				: "yes",
+					"privatechat" 			: "yes",
+					"extras" 				: "Increased Users",
+					"cost"					: "$50 US per month",
+					"incoming"				: "none",
+					"outgoing" 				: "none"
 
 				}
 		}

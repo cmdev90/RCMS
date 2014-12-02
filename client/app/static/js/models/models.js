@@ -107,13 +107,37 @@
 			"privatechat" 			: "no",
 			"extras" 				: "Increased Transactions",
 			"cost"					: "$0 US per month",
-			"exceeded_cost"			: "$0.002 US per transaction"	
+			"incoming"				: "$0.001 US per kb",
+			"outgoing" 				: "$0.002 US per kb"	
 	    }
 	});	
 
 	RCMS.Collections.PackagesCollection = Backbone.Collection.extend({
 		model 	: RCMS.Models.PackagesModel,
 		url 	: '/get/all/packages'
+	});
+
+
+
+
+	RCMS.Models.UsageModel = Backbone.Model.extend({						
+
+		initialize: function(){	
+			console.log('usage model');		
+		},
+
+		defaults: {
+			"PartitionKey": null, 
+			"RowKey": null, 		
+			"event": "subscribe", 
+			"length": "79", 
+			"timestamp": "2014-12-01 23:40:17", 
+			"transmission": "incoming"	
+	    }
+	});	
+
+	RCMS.Collections.UsageCollection = Backbone.Collection.extend({
+		model 	: RCMS.Models.UsageModel		
 	});
 
 }(document, this, jQuery, Backbone, _));

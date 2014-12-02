@@ -12,6 +12,30 @@
 
 		render : function(){
 			$(this.el).html(this.template(this.model));	
+			// this.hide();
+			var collection = new RCMS.Collections.UsageCollection()
+			dataset = {},
+			stats1 = this.$el.find("#stats1"),
+			stats2 = this.$el.find("#stats2"),
+			stats3 = this.$el.find("#stats3"),			
+			that = this;
+
+
+			collection.fetch({
+				url : '/get/user/app/usage/'+this.model.id,
+				success : function(col, response){
+					dataset = RCMS.Chart.parseData(response.usage);					  
+					RCMS.Chart.genChart(stats1, "Packaet Length Over Time", "Incoming Packets", dataset.inTime, "Packets (byte)", dataset.inPacketLength, "Incoming");
+					RCMS.Chart.genChart(stats2, "Packaet Length Over Time", "OutGoing Packets", dataset.outTime, "Packets (byte)", dataset.outPacketLength, "OutGoing");
+					RCMS.Chart.genChart(stats3, "Incoming Vs Outgoing", "Packets", dataset.transmission, "Packets (byte)", dataset.packets, "Transmission");
+					// that.show();
+				}, 
+				error : function(col, response){
+					console.log(response);
+					// that.show();
+				}
+			});
+
 			return this;
 		},
 
@@ -47,6 +71,7 @@
 			app.url = '/get/user/package/'+ $.jStorage.get('email') +'/'+ this.model.id;
 			app.fetch({
 				success : function(model, response){
+					console.log(response);
 					$(app_panel).prepend(new RCMS.Views.SinglePackage({model:response.package[0]}).el);
 					that.show();
 				},
