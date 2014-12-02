@@ -73,12 +73,12 @@ module.exports = function (partitionKey){
 	    })
 	}
 
-	function updateStatistics(data, fn) {
+	function addStatistics(data, fn) {
 		var uniqueID = new Date().getTime().toString()
 
 		var statsUpdate = {
 			PartitionKey: entGen.String(partitionKey)
-			, RowKey: entGen.String(uniqueID) 
+			, RowKey: entGen.String(uniqueID)
 		}
 
 		// add the properties in the data object to the statsUpdate object.
@@ -88,12 +88,12 @@ module.exports = function (partitionKey){
 
 		// save the new statistics to the datastore.
 		tableSvc.insertEntity(usageTable, statsUpdate, function(error, result, response){
-			if(error) return fn(error)
+			// if(error) return fn(error)
 
-			if (result)
-				return fn(null, result)
+			// if (result)
+			// 	return fn(null, result)
 
-			return fn(true)
+			// return fn(true)
 		})
 	}
 
@@ -102,22 +102,6 @@ module.exports = function (partitionKey){
 		var query = new azure.TableQuery().where('PartitionKey eq ?', partitionKey)
 
 		tableSvc.queryEntities(usageTable, query, null, function (error, data, response){
-			if(error) return fn(error)
-
-			if(data)
-				return fn(null, data)
-			return fn(true)
-		})
-	}
-
-	function subscribeTo (subject, observer, fn) {
-		var entGen = azure.TableUtilities.entityGenerator
-			, subscription = {
-				PartitionKey: entGen.String(subject)
-				, RowKey: entGen.String(observer)
-			}
-
-		tableSvc.insertEntity(subscriptionTable, subscription, function (error, data, response){
 			if(error) return fn(error)
 
 			if(data)
@@ -135,14 +119,50 @@ module.exports = function (partitionKey){
 	}
 
 
+	function subscribeTo (subject, observer, fn) {
+		if (subject === observer) fn(true)
+		else {
+			var entGen = azure.TableUtilities.entityGenerator
+				, subscription = {
+					PartitionKey: entGen.String(subject)
+					, RowKey: entGen.String(observer)
+				}
+
+			tableSvc.insertEntity(subscriptionTable, subscription, function (error, data, response){
+				if(error) return fn(error)
+
+				if(data)
+					return fn(null, data)
+				return fn(true)
+			})
+		}
+	}
+
+
+	function getSubscribers (key, fn) {
+		var query = new azure.TableQuery().where('PartitionKey eq ?', key)
+
+		tableSvc.queryEntities(subscriptionTable, query, null, function (error, users, response){
+			if (error) fn(error)
+			else {
+				_.each(users.entries, function (user){
+					if (user && user.RowKey) fn(null, user.RowKey._) // return the identity of this subscriber.
+					else fn(null, user)  // else just return the null user object. It will be handled by callback.
+				})
+			}
+		})
+	}
+
+
 	return {
 		makeOrUpdateUser: makeOrUpdateUser
 		, findUser: findUser
-		, updateStatistics: updateStatistics
+		, addStatistics: addStatistics
 		, getUsageStatistics: getUsageStatistics
 		, findUsers: findUsers
 		, subscribeTo: subscribeTo
 		, findOneUser: findOneUser
+		, getSubscribers: getSubscribers
 	}
 
 
