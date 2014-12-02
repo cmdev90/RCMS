@@ -30,17 +30,20 @@
 
 		listApps : function(body){
 			var app = new RCMS.Models.ApplicationModel();
-			app.url = '/get/user/applications/'+ $.jStorage.get('email');
-			console.log(app.url);
+			app.url = '/get/user/applications/'+ $.jStorage.get('email'),
+			that = this;
+			this.hide();
 			app.fetch({
 				success : function(model, response){
 					console.log(response);
 					$.each(response.applications, function(index, data){
 						$(body).append(new RCMS.Views.AppRow({model:data}).el);
 					});
+					that.show();
 				},
 				error : function(model, response){
 					console.log(response);
+					that.show();
 				}
 			});
 		},

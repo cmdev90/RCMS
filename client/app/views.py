@@ -2,7 +2,7 @@ from app import app
 import os
 from flask import jsonify, abort, make_response, request, url_for
 from flask.ext.httpauth import HTTPBasicAuth
-import table_services, services, json, hashlib, user_services
+import table_services, services, json, hashlib, user_services, app_services
 
 
 
@@ -14,6 +14,18 @@ def get_user_package(partition, rowkey):
 	else :
 		return jsonify({"package" : {}}), 404
 
+
+@app.route('/get/user/app/usage/<partition>', methods=['GET'])
+def get_user_app_usage(partition):
+	usage = app_services.get_usages_by_app(partition)
+	list = []
+	if usage is not None:
+		for u in usage:
+			list.append(u.__dict__)
+
+		return jsonify({"usage" : list}), 200
+	else :
+		return jsonify({"packages" : {}}), 404
 
 
 @app.route('/get/all/packages', methods=['GET'])

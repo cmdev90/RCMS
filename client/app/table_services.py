@@ -1,4 +1,4 @@
-import json, random, services, hashlib, user_services
+import json, random, services, hashlib, user_services, app_services
 from azure.storage import TableService, Entity
 
 
@@ -50,8 +50,8 @@ def saveApplication(application):
 def getUserApps(partition):	
 	list = []
 	try:
-		apps = ts.query_entities(table, "PartitionKey eq '"+partition+"'")
-		for a in apps :
+		apps = update_cost_requests(partition)
+		for a in apps :			
 			list.append(a.__dict__)	
 		return list
 	except Exception, e:
@@ -86,6 +86,7 @@ def delete_user_app(partition, rowkey):
 		return -1
 		
 
+
 def update_user_package(data):
 	app = get_application(data['partition'], data['rowkey'])
 	if app is not None:
@@ -106,4 +107,22 @@ def get_package(partition, rowkey):
 		return services.get_package(a.package_type)
 	else :
 		return None
-	
+
+
+def update_cost_requests(partition):
+	try:
+		
+		apps = ts.query_entities(table, "PartitionKey eq '"+partition+"'")
+
+		for a in apps :
+			temp = app_services.get_cost_and_requests(a.RowKey)
+			# temp = app_services.get_cost_and_requests("kjlhajkdlhfjhasdnfasdkjflnasdf")
+			if temp is not None:
+				a.cost = temp['cost']
+				a.requests = temp['requests']
+				ts.update_entity(table, partition, a.RowKey,a)
+		apps = ts.query_entities(table, "PartitionKey eq '"+partition+"'")
+		return apps	
+	except Exception, e:
+		print e
+		return None
