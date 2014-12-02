@@ -4,8 +4,38 @@
    Author's custom styles
    ========================================================================== */
 
+
+   body{  
+
+		width: 100%;
+		height:100%;
+		margin:auto;  		
+		
+	}
+
+	.rcms-top{
+		background-color: white;
+		box-shadow: 0px 4px 5px #D3D3D3;;
+	}
+
+	.rcms-top > .container-fluid> .navbar-header> a, #user_logout{		
+		color: rgb(27, 25, 25);
+		font-family: serif;
+		font-size: x-large;		
+	}
+
+	.parent-container{
+		margin: auto;
+		width: 100%;
+		height: inherit;
+		min-height: 100%;
+	}
+
 	.main-container{
-		min-height: 500px;   	
+		margin: auto;
+		min-height: 700px;
+		height: inherit;	
+		padding: 0px 0px 0px 30px;
 	}
 
 	.panel-body-format{
@@ -17,6 +47,25 @@
 		padding: 15px 0px 0px 10px;
 	}
 
+	#rcms-nav-app, #rcms-nav{
+		min-height: 700px;
+		padding: 10px 10px;		
+		background-color: #fafafa;
+	}
+
+	#rcms-body, #rcms-body-app{
+		padding: 0px 0px 0px 40px;
+	}
+
+
+	#rcms-nav-app > ul.nav-pills > li > a,#rcms-nav> ul.nav-pills > li > a{
+		color: #000000;
+		font-size: large;	
+	}
+
+	#rcms-nav-app > ul.nav-pills > li.active > a,#rcms-nav> ul.nav-pills > li.active > a{
+		background-color: rgba(0,0,0,0.035);
+	}
 
 
 

@@ -12,9 +12,14 @@
 
 		render : function(){
 			
-			this.$el.html(this.template());			
-			this.listApps(this.$el.find("#rcms-app-list"));
-			this.$el.find("#app-count").html("App Count: "+$.jStorage.get('app_count'));
+			this.$el.html(this.template());	
+			if(parseInt($.jStorage.get('app_count')) > 0){
+				this.listApps(this.$el.find("#rcms-app-list"));	
+			}else{
+				this.$el.find("#app-list").html("<p>You do not have any active projects.</p>")
+			}
+			
+			this.$el.find("#app-count").html("<b>App Count: "+$.jStorage.get('app_count')+"</b>");
 			return this;
 		},
 

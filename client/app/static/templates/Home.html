@@ -4,16 +4,16 @@
     <li role="presentation" class = "package"><a href="#package">Packages</a></li>  
   </ul>
 </div>
-<div class="col-xs-12 col-md-9 col-md-offset-1" id= "rcms-body">
+<div class="col-xs-12 col-md-9" id= "rcms-body">
   <div class="row">
-    <div class="col-md-1 col-md-offset-1">
+    <div class="col-md-1">
       <button type="button" class="btn btn-primary new-app-btn" data-toggle="modal" data-target="#appModal">Create App</button> 
     </div>
     <div class="col-md-3 col-md-offset-1">
       <p id="app-count">App Count: </p>
     </div>
   </div> 
-  <div class="row">
+  <div class="row" style="padding-top:10px;" id="app-list">
     <table class="table table-hover">
       <thead>
         <tr>              
@@ -23,8 +23,6 @@
           <th>Port</th>                    
           <th>Requests</th>                    
           <th>Cost</th>                    
-          <!-- <th>Edit</th>                    
-          <th>Delete</th>   -->
         </tr>
       </thead>
       <tbody id="rcms-app-list"> 
