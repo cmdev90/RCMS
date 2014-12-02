@@ -165,6 +165,5 @@ module.exports = function (partitionKey){
 		, getSubscribers: getSubscribers
 	}
 
-
 }
 
