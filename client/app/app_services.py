@@ -54,7 +54,7 @@ def get_usages_by_app_agg(app_id, offset):
 				t = datetime.datetime.fromtimestamp(float(s)/1000.)
 				fmt = "%Y-%m-%d %H:%M"
 				now = datetime.datetime.now() - datetime.timedelta(minutes=int(offset))
-				print now.strftime(fmt)
+				# print now.strftime(fmt)
 				if t.strftime(fmt) >= now.strftime(fmt) :				
 					u.timestamp = t.strftime(fmt)								
 					list.append(u.__dict__)
