@@ -1,5 +1,6 @@
-import json, random, services
+import json, random, services, datetime
 from azure.storage import TableService, Entity
+import sqlite3
 
 
 account_name = 'rcms'     
@@ -11,7 +12,6 @@ ts = TableService(account_name = account_name, account_key = account_key)
 ts.create_table(table)
 
 auth = 'kjlhajkdlhfjhasdnfasdkjflnasdf'
-
 
 def get_usages_by_app(app_id):
 	
@@ -39,4 +39,45 @@ def get_cost_and_requests(app_id):
 		return None
 
 
+
+def get_usages_by_app_agg(app_id, offset):
+
+	list = []
+	try:
+		usage = get_usages_by_app(app_id)
+		
+		if usage is not None:
+
+			for u in usage:
+
+				s = str(u.RowKey)
+				t = datetime.datetime.fromtimestamp(float(s)/1000.)
+				fmt = "%Y-%m-%d %H:%M"
+				now = datetime.datetime.now() - datetime.timedelta(minutes=int(offset))
+				print now.strftime(fmt)
+				if t.strftime(fmt) >= now.strftime(fmt) :				
+					u.timestamp = t.strftime(fmt)								
+					list.append(u.__dict__)
+			l2 = group_by(list)
+			return l2		
+	except Exception, e:
+		return None			
+
+
+
+def group_by(L):
+	
+	results = {}
+	for item in L:
+
+		key = (item["transmission"], item["event"], item["timestamp"])
+		if key in results:  # combine them
+			results[key] = {"PartitionKey": item["PartitionKey"], "RowKey": item["RowKey"], 
+			"transmission": item["transmission"], "event": item["event"], 
+			"timestamp": item["timestamp"], "length": int(item["length"]) + int(results[key]["length"])}
+		else:  # don't need to combine them
+			results[key] = item
+
+	return results.values()
+	
 # print get_cost_and_requests(auth)
