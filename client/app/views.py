@@ -105,7 +105,7 @@ def delete_user_app(partition, rowkey):
 @app.route('/user/login', methods=['POST'])		
 def user_login():
 	if not request.json:
-		abort(404)
+		abort(400)
 	email = request.json['email']
 	password = request.json['password']
 	user = user_services.authenticate(email, password)

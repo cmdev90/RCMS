@@ -3,3 +3,4 @@ flask-restful==0.2.3
 Flask-HTTPAuth==1.0.0
 azure==0.8.4
 gunicorn==19.1.1
+requests==2.5.0
