@@ -29,10 +29,16 @@
 			collection.fetch({
 				url : '/get/user/app/usage/'+this.model.id + '/'+ offset,
 				success : function(col, response){
-					dataset = RCMS.Chart.parseData(response.usage);					  
-					RCMS.Chart.genChart(stats1, "Packet Length Over Time", "Incoming Packets", dataset.inTime, "Packets (byte)", dataset.inPacketLength, "Incoming");
-					RCMS.Chart.genChart(stats2, "Packet Length Over Time", "OutGoing Packets", dataset.outTime, "Packets (byte)", dataset.outPacketLength, "OutGoing");
-					RCMS.Chart.genChart(stats3, "Incoming Vs Outgoing", "Packets", dataset.transmission, "Packets (byte)", dataset.packets, "Transmission");
+					if(response.usage.length > 0){
+						dataset = RCMS.Chart.parseData(response.usage);					  
+						RCMS.Chart.genChart(stats1, "Packet Length Over Time", "Incoming Packets", dataset.inTime, "Packets (byte)", dataset.inPacketLength, "Incoming");
+						RCMS.Chart.genChart(stats2, "Packet Length Over Time", "OutGoing Packets", dataset.outTime, "Packets (byte)", dataset.outPacketLength, "OutGoing");
+						RCMS.Chart.genChart(stats3, "Incoming Vs Outgoing", "Packets", dataset.transmission, "Packets (byte)", dataset.packets, "Transmission");
+					}else{						
+						RCMS.Chart.genChart(stats1, "Packet Length Over Time", "Incoming Packets", RCMS.Chart.defaultArr, "Packets (byte)", RCMS.Chart.defaultArr, "Incoming");
+						RCMS.Chart.genChart(stats2, "Packet Length Over Time", "OutGoing Packets", RCMS.Chart.defaultArr, "Packets (byte)", RCMS.Chart.defaultArr, "OutGoing");
+						RCMS.Chart.genChart(stats3, "Incoming Vs Outgoing", "Packets", RCMS.Chart.defaultStrArr, "Packets (byte)", RCMS.Chart.defaultArr, "Transmission");
+					}					
 					that.show();
 				}, 
 				error : function(col, response){

@@ -2,6 +2,14 @@
 
     RCMS.Chart = {
 
+        defaultArr : [0,0,0,0,0,0,0,0,0,0,0,0],
+
+        defaultStrArr : [
+                "transmission", "transmission","transmission",
+                "transmission","transmission","transmission",
+                "transmission","transmission","transmission",
+                "transmission","transmission","transmission"],
+
         addZero : function (i) {
             if (i < 10) {
                 i = "0" + i;
