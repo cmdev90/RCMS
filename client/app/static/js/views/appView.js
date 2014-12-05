@@ -12,7 +12,12 @@
 
 		render : function(){
 			$(this.el).html(this.template(this.model));	
-			// this.hide();
+			this.popluateCharts(10);
+			return this;
+		},
+
+		popluateCharts : function(offset){
+			this.hide();
 			var collection = new RCMS.Collections.UsageCollection()
 			dataset = {},
 			stats1 = this.$el.find("#stats1"),
@@ -22,21 +27,48 @@
 
 
 			collection.fetch({
-				url : '/get/user/app/usage/'+this.model.id,
+				url : '/get/user/app/usage/'+this.model.id + '/'+ offset,
 				success : function(col, response){
-					dataset = RCMS.Chart.parseData(response.usage);					  
-					RCMS.Chart.genChart(stats1, "Packaet Length Over Time", "Incoming Packets", dataset.inTime, "Packets (byte)", dataset.inPacketLength, "Incoming");
-					RCMS.Chart.genChart(stats2, "Packaet Length Over Time", "OutGoing Packets", dataset.outTime, "Packets (byte)", dataset.outPacketLength, "OutGoing");
-					RCMS.Chart.genChart(stats3, "Incoming Vs Outgoing", "Packets", dataset.transmission, "Packets (byte)", dataset.packets, "Transmission");
-					// that.show();
+					if(response.usage.length > 0){
+						dataset = RCMS.Chart.parseData(response.usage);					  
+						RCMS.Chart.genChart(stats1, "Packet Length Over Time", "Incoming Packets", dataset.inTime, "Packets (byte)", dataset.inPacketLength, "Incoming");
+						RCMS.Chart.genChart(stats2, "Packet Length Over Time", "OutGoing Packets", dataset.outTime, "Packets (byte)", dataset.outPacketLength, "OutGoing");
+						RCMS.Chart.genChart(stats3, "Incoming Vs Outgoing", "Packets", dataset.transmission, "Packets (byte)", dataset.packets, "Transmission");
+					}else{						
+						RCMS.Chart.genChart(stats1, "Packet Length Over Time", "Incoming Packets", RCMS.Chart.defaultArr, "Packets (byte)", RCMS.Chart.defaultArr, "Incoming");
+						RCMS.Chart.genChart(stats2, "Packet Length Over Time", "OutGoing Packets", RCMS.Chart.defaultArr, "Packets (byte)", RCMS.Chart.defaultArr, "OutGoing");
+						RCMS.Chart.genChart(stats3, "Incoming Vs Outgoing", "Packets", RCMS.Chart.defaultStrArr, "Packets (byte)", RCMS.Chart.defaultArr, "Transmission");
+					}					
+					that.show();
 				}, 
 				error : function(col, response){
 					console.log(response);
-					// that.show();
+					that.show();
 				}
 			});
 
-			return this;
+		},
+
+		events : {
+			"change #offset-form" : "changeGraphs"
+		},
+
+		changeGraphs : function(e){
+			var that = this,
+			form = this.$el.find("#offset-form"),
+			offset = this.getFormData(form).offset;
+			this.popluateCharts(offset);
+		},
+
+		getFormData : function(id){			
+			var data = {},
+			form = this.$el.find(id),
+			viewArr = form.serializeArray();			
+
+			$.each(viewArr, function(i,d){
+				data[viewArr[i].name] = viewArr[i].value;				
+			});		
+			return data;
 		},
 
 		hide : function(){

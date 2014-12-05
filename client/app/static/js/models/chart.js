@@ -2,6 +2,14 @@
 
     RCMS.Chart = {
 
+        defaultArr : [0,0,0,0,0,0,0,0,0,0,0,0],
+
+        defaultStrArr : [
+                "transmission", "transmission","transmission",
+                "transmission","transmission","transmission",
+                "transmission","transmission","transmission",
+                "transmission","transmission","transmission"],
+
         addZero : function (i) {
             if (i < 10) {
                 i = "0" + i;
@@ -13,9 +21,9 @@
             var d = new Date(date);    
             var h = RCMS.Chart.addZero(d.getHours());
             var m = RCMS.Chart.addZero(d.getMinutes());
-            // var s = RCMS.Chart.addZero(d.getSeconds());
-            // return h + ":" + m + ":" + s;
-            return h + ":" + m;
+            var s = RCMS.Chart.addZero(d.getSeconds());
+            return h + ":" + m + ":" + s;
+            // return h + ":" + m;
         },
 
 
