@@ -1,4 +1,4 @@
-var cluster = require('cluster')
+var proc = require('child_process')
 	, express = require('express')
 	, app = express()
 	, azure = require('azure-storage')
@@ -11,7 +11,7 @@ var cluster = require('cluster')
 var RunRecords = {}
 
 // Setup this process as the master process
-cluster.setupMaster({ exec : "worker.js" })
+//cluster.setupMaster({ exec : "worker.js" })
 
 // updates the run record 
 var UpdateInstancePackage = function (data, fn) {
@@ -36,9 +36,10 @@ var MaintainInstance = function (key, fn) {
 
 	if (instance) {
 		try {
-			console.log("Master will now kill instance " + instance.id + " from the working pool " + key)
+			console.log("Master will now restart instance " + instance.id + " from the working pool " + key)
 			instance.kill()
-			RunRecords[key]["instance"] = cluster.fork({port: RunRecords[key]['port'], auth: key, config: 'free'})
+			var env = {config: 'free'}
+			RunRecords[key]["instance"] = proc.fork('worker.js',[RunRecords[key]['port'], key, 'free'])
 		} 
 		catch (err) {
 			fn(err, null)
@@ -46,8 +47,8 @@ var MaintainInstance = function (key, fn) {
 	}
 	else {
 		try {
-			RunRecords[key]["instance"] = cluster.fork({port: RunRecords[key]['port'], 'package': RunRecords[key]['port'] })
-			console.log("Master successfully created instance " + RunRecords[key]["instance"].id + " and added it to the working pool " + key)
+			RunRecords[key]["instance"] = proc.fork('worker.js',[RunRecords[key]['port'], key, 'free'])
+			console.log("Master successfully created instance " + key + " and added it to the working pool.")
 		} 
 		catch (err) {
 			fn(err, null)
@@ -58,38 +59,51 @@ var MaintainInstance = function (key, fn) {
 	fn(null, "Success")
 }
 
+
+var tableSvc = azure.createTableService(account_name, account_key)
+tableSvc.createTableIfNotExists('users', function(error, result, response){
+    if(!error){
+        // Table exists or created
+    }
+})
+
+var query = new azure.TableQuery().where('PartitionKey eq \'users\'')
+
+tableSvc.queryEntities('users', query, null, function (error, data, response) {
+	for (var index in data.entries){
+		var user = data.entries[index].RowKey._
+
+		var query2 = new azure.TableQuery().where('PartitionKey eq ?', user)
+		tableSvc.queryEntities('applications', query2, null, function (error, data, response) {
+			for (var index in data.entries){
+				var application = data.entries[index]
+				UpdateInstancePackage({
+					_package: application.package_type._
+					, _authKey: application.RowKey._
+					, _port: application.port._
+					, _priority: 200
+				}, function (error, response){
+					if (error) console.log(error)
+				})
+			}
+		})
+	}
+})
+
 // Go into the azure and pull this clients records. Compare the differences
 // between the running instances and what it should be on record.
-app.get('/update_package/:package/:auth/:port', function (req, res) {
-	// var data = {
-	// 	_package: req.params['package']
-	// 	, _authKey: req.params['auth']
-	// 	, _port: req.params['port']
-	// }
-
+app.get('/update_package/:auth/:owner', function (req, res) {
 	// Set up variables we are going to need
-	var partitionKey = 'users'
-		, rowKey = 'jane@mail.com'
-		, table = 'storage'
+	var partitionKey = req.params['owner']
+		, rowKey = req.params['auth']
 		, tableService = azure.createTableService(account_name, account_key) // by creating a new table service!
 
 	// Try to retrieve the entity from the the table storage.
-	tableService.retrieveEntity(table, partitionKey, rowKey, function (error, data, response){
-
-		console.log(data);
-
+	tableService.retrieveEntity('applications', partitionKey, rowKey, function (error, data, response){
 		if(error) return res.send('Goodbye cruel world!' + error)
 		if (data) {
-			UpdateInstancePackage({_package: 'free' /*data.package_type._*/, _port:3010/*data.port._*/, _authKey: 'sdjfg76rrtduyf64a7yig58=-8r7'/*data.key._*/, _priority: 200/*data.priority._*/}, function (error, response){
+			UpdateInstancePackage({_package: data.package_type._, _port: data.port._, _authKey: data.RowKey._, _priority: 200}, function (error, response){
 				if (error) return res.send(error)
-
-				var i = 0
-				for (var r in RunRecords){
-					i++
-				}
-
-				console.log(i)
-
 				return res.send(response)
 			})
 		}

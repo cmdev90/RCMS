@@ -1,16 +1,18 @@
 
-var auth = 'kjlhajkdlhfjhasdnfasdkjflnasdf'
-var port = 3010
+var port = process.argv[2]
+var auth = process.argv[3]
+var config = process.argv[4]
 
 var datastore = require('./datastore.js')(auth)
-
 
 // we create a new http server that does nothing but open a connection for socketio to make use of.
 var app = require('http').createServer()
 var io = require('socket.io')(app)
 
 // Start listening on the port set by the environment.
-app.listen(8181)
+app.listen(port, function(){
+  console.log('Worker process ' + auth + ' listening on port: ' + port)
+})
 
 var connectedSockets = {} // each connected socket will be stored in this object so it can be refrenced easy
 
@@ -68,6 +70,10 @@ function notifySubscribers (identity) {
       }
     }
   })
+}
+
+function broadcastSelf (socket) {
+	socket.broadcast('notify')
 }
 
 function authenticateClient (identity, secret, socket) {

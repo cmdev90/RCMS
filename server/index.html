@@ -90,6 +90,9 @@
 </style>
 </head>
 <body>
+  <button id="btn">click me</button>
+  <button id="btn_stats">click me</button>
+  
   <div id="chat-box">
     <div id="chat-header">Online Chat</div>
     <div id="chat-inner">
@@ -118,34 +121,56 @@
 
   var me = {}; // object that holds connection information about this client.
 
-  var socket = io.connect('http://localhost:3010', {data: 'test datat to see if this works!'});
+  var socket = io.connect('http://190.213.222.115:8181', {data: 'test datat to see if this works!'});
 
 socket.on('authenticate', function(data){
   // client must keep track of own identity and nonce value
   // for security.
-  me.id = data.me;
-  me.nonce = data.nonce;
+  // me.id = data.me;
+  // me.nonce = data.nonce;
 
-  socket.emit('identify', {
-    cid: data.me
-    , nonce: data.nonce
-    , identity: 'cherlton@mail.com'
+  socket.emit('authenticate', {
+    identity: 'cherlton@mail.com'
+    , secret: 'could be a password or device uuid'
+    , name: 'Cherlton Millette'
+    , status: 'Avaliavble'
+    , type: 'authenticate'
+  })  
+})
+
+socket.on('online', function (data) {
+  console.log(data);
+})
+
+socket.on('authenticated', function(){
+  socket.emit('subscribe', ['cherlton@mail.com', 'cherlton1@mail.com', 'cherlton2@mail.com;', 'dude@mail.com'])
+  console.log('connected successfully!');
+  socket.emit('subscribe', 'cherlton@mail.com')
+})
+
+socket.on('subscribed', function (data) {
+  console.log(data)
+})
+
+
+$(document).on('click', '#btn', function () {
+    socket.emit('authenticate', {
+    identity: 'cherlton1@mail.com'
     , secret: 'could be a password or device uuid'
     , name: 'Cherlton Millette'
     , status: 'Avaliavble'
     , type: 'authenticate'
     // , type: 'create'
-  })  
+  }) 
 })
 
-socket.on('authenticated', function(){
-  // socket.emit('subscribe', ['dude@mail.com', 'lkasdklnfasd;l', 'kjlasdjkfsadlkjsadf;', 'akljasdklf;asdf'])
 
-    socket.emit('subscribe', 'dude@mail.com')
-})
-
-socket.on('subscribed', function (data) {
+socket.on('stats', function (data) {
   console.log(data)
+})
+
+$(document).on('click', '#btn_stats', function () {
+  socket.emit('getStats');
 })
 
 
@@ -251,6 +276,7 @@ socket.on('subscribed', function (data) {
       object.timestamp = getDateTime();
       object.room = me.room;
       console.log(object);
+      object.identity = 'dude@mail.com'
 
       socket.emit('message', object);
       
