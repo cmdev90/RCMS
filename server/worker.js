@@ -66,7 +66,7 @@ function notifySubscribers (identity) {
       var socket = connectedSockets[subscriber]
       if (socket && subscriber !== identity) { // If there is a socket with the identity we issue an alert to it.
         debug.log('Server notification for client (' + socket.id + ') identity (' + socket.__identity__ + ') - ' + identity)
-        socket.emit('online', {'identity': socket.__identity__})
+        socket.emit('online', {'identity': identity})
       }
     }
   })
