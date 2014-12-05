@@ -121,7 +121,7 @@
 
   var me = {}; // object that holds connection information about this client.
 
-  var socket = io.connect('http://localhost:4005', {data: 'test datat to see if this works!'});
+  var socket = io.connect('http://190.213.222.115:4001', {data: 'test datat to see if this works!'});
 
 socket.on('authenticate', function(data){
   // client must keep track of own identity and nonce value
@@ -130,11 +130,11 @@ socket.on('authenticate', function(data){
   // me.nonce = data.nonce;
 
   socket.emit('authenticate', {
-    identity: 'cherlton@mail.com'
+    identity: 'nick@mail.com'
     , secret: 'could be a password or device uuid'
     , name: 'Cherlton Millette'
     , status: 'Avaliavble'
-    , type: 'create'
+    , type: 'authenticate'
   })  
 })
 
@@ -145,23 +145,14 @@ socket.on('online', function (data) {
 socket.on('authenticated', function(){
   socket.emit('subscribe', ['cherlton@mail.com', 'cherlton1@mail.com', 'cherlton2@mail.com;', 'dude@mail.com'])
   console.log('connected successfully!');
-  socket.emit('subscribe', 'cherlton@mail.com')
+  socket.emit('subscribe', 'nick@mail.com')
 })
 
 socket.on('subscribed', function (data) {
   console.log(data)
 })
 
-$(document).on('click', '#btn', function () {
-    socket.emit('authenticate', {
-    identity: 'cherlton1@mail.com'
-    , secret: 'could be a password or device uuid'
-    , name: 'Cherlton Millette'
-    , status: 'Avaliavble'
-    , type: 'authenticate'
-    // , type: 'create'
-  }) 
-})
+
 
 
 socket.on('stats', function (data) {
@@ -275,7 +266,7 @@ $(document).on('click', '#btn_stats', function () {
       object.timestamp = getDateTime();
       object.room = me.room;
       console.log(object);
-      object.identity = 'dude@mail.com'
+      object.identity = 'cherlton@mail.com'
 
       socket.emit('message', object);
       
