@@ -44,7 +44,7 @@ def saveApplication(application):
 						"package_type" 	: app.package_type,
 						"status" 		: "created"
 					}
-					notifying.notify_client("", temp)
+					notifying.notify_client("http://190.213.222.115:3000/update_package", temp)
 					return app_count
 				else :
 					return -1
@@ -88,7 +88,7 @@ def delete_user_app(partition, rowkey):
 						"package_type" 	: "",
 						"status" 		: "deleted"
 					}
-					notifying.notify_client("", temp)
+					notifying.notify_client("http://190.213.222.115:3000/update_package", temp)
 					return count
 				else :
 					return -1
@@ -112,7 +112,7 @@ def update_user_package(data):
 				"package_type" 	: app.package_type,
 				"status" 		: "update"
 			}
-			notifying.notify_client("", temp)
+			notifying.notify_client("http://190.213.222.115:3000/update_package", temp)
 			return True
 		except Exception, e:
 			return False
