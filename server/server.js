@@ -104,6 +104,8 @@ app.post('/update_package', function (req, res) {
 		, rowKey = req.query['rowkey']
 		, tableService = azure.createTableService(account_name, account_key) // by creating a new table service!
 
+	console.log(req.body)
+
 	if (partitionKey && rowKey) {
 		// Try to retrieve the entity from the the table storage.
 		tableService.retrieveEntity('applications', partitionKey, rowKey, function (error, data, response){
