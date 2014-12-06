@@ -5,6 +5,12 @@ var proc = require('child_process')
 	, account_name = 'rcms' // Azure account information for accessing the table storage.
 	, account_key = '9L1kZqrgAovvt1KI3xOfRj6RxLPt+hWpAI2mfsJ3zpf6DjMCN/TqYcaCb956jYG8qELgWpv0T0Cn5OC4vCPOng=='
 	
+var bodyParser = require('body-parser');
+var multer = require('multer'); 
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(multer()); // for parsing multipart/form-data
 
 // Create client record object here. This is all kept in the 
 // applications main memory for convience.
@@ -94,14 +100,14 @@ tableSvc.queryEntities('users', query, null, function (error, data, response) {
 // between the running instances and what it should be on record.
 app.post('/update_package', function (req, res) {
 	// Set up variables we are going to need
-	var partitionKey = req.params['partition']
-		, rowKey = req.params['rowkey']
+	var partitionKey = req.query['partition']
+		, rowKey = req.query['rowkey']
 		, tableService = azure.createTableService(account_name, account_key) // by creating a new table service!
 
-	if (partitionKey && rowkey) {
+	if (partitionKey && rowKey) {
 		// Try to retrieve the entity from the the table storage.
 		tableService.retrieveEntity('applications', partitionKey, rowKey, function (error, data, response){
-			if(error) return res.send('Goodbye cruel world!' + error)
+			if(error) return res.send(error)
 			if (data) {
 				UpdateInstancePackage({_package: data.package_type._, _port: data.port._, _authKey: data.RowKey._, _priority: 200}, function (error, response){
 					if (error) return res.send(error)

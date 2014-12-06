@@ -134,12 +134,8 @@ socket.on('authenticate', function(data){
     , secret: 'could be a password or device uuid'
     , name: 'Cherlton Millette'
     , status: 'Avaliavble'
-    , type: 'create'
+    , type: 'authenticate'
   })  
-})
-
-socket.on('error', function (data) {
-  console.log(data);
 })
 
 socket.on('online', function (data) {
@@ -217,8 +213,9 @@ $(document).on('click', '#btn_stats', function () {
     socket.emit('chat', { id : client });
   });
 
-  socket.on('err', function () {
+  socket.on('err', function (data) {
     alert("Oh Snap...\n\nThe monkeys we hired broke somthing again. Service will be restored shortly.\n\nPlease contact us at if problems persist.");
+    console.log(data);
   });
 
   socket.on('message', function (object) {
