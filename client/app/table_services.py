@@ -1,4 +1,4 @@
-import json, random, services, hashlib, user_services, app_services
+import json, random, services, hashlib, user_services, app_services, notifying
 from azure.storage import TableService, Entity
 
 
@@ -38,6 +38,13 @@ def saveApplication(application):
 				app_count+=1 #increase the count
 				user.app_count = str(app_count) #convert count back to str
 				if user_services.update_user(application['partition'], user): #update the user count
+					temp = {
+						"partition" 	: app.PartitionKey,
+						"rowkey"		: app.RowKey,
+						"package_type" 	: app.package_type,
+						"status" 		: "created"
+					}
+					notifying.notify_client("", temp)
 					return app_count
 				else :
 					return -1
@@ -75,6 +82,13 @@ def delete_user_app(partition, rowkey):
 				count-=1
 				user.app_count = str(count)
 				if user_services.update_user(partition, user):
+					temp = {
+						"partition" 	: partition,
+						"rowkey"		: rowkey,
+						"package_type" 	: "",
+						"status" 		: "deleted"
+					}
+					notifying.notify_client("", temp)
 					return count
 				else :
 					return -1
@@ -92,6 +106,13 @@ def update_user_package(data):
 		app.package_type = data['package_type']
 		try:
 			ts.update_entity(table, data['partition'], data['rowkey'],app)
+			temp = {
+				"partition" 	: app.PartitionKey,
+				"rowkey"		: app.RowKey,
+				"package_type" 	: app.package_type,
+				"status" 		: "update"
+			}
+			notifying.notify_client("", temp)
 			return True
 		except Exception, e:
 			return False

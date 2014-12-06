@@ -74,6 +74,7 @@
             $(id).highcharts({
                 chart: {
                     type: 'spline'
+                    ,reflow : true
                 },
                 title: {
                     text: titleTx
@@ -105,5 +106,5 @@
             });
          }
     }
-
+    // $(window).trigger("resize");
 }(document, this, jQuery, Backbone, _));                
