@@ -92,10 +92,10 @@ tableSvc.queryEntities('users', query, null, function (error, data, response) {
 
 // Go into the azure and pull this clients records. Compare the differences
 // between the running instances and what it should be on record.
-app.get('/update_package/:auth/:owner', function (req, res) {
+app.post('/update_package', function (req, res) {
 	// Set up variables we are going to need
-	var partitionKey = req.params['owner']
-		, rowKey = req.params['auth']
+	var partitionKey = req.params['partition']
+		, rowKey = req.params['rowkey']
 		, tableService = azure.createTableService(account_name, account_key) // by creating a new table service!
 
 	// Try to retrieve the entity from the the table storage.
