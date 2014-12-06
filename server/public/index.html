@@ -138,6 +138,10 @@ socket.on('authenticate', function(data){
   })  
 })
 
+socket.on('error', function (data) {
+  console.log(data);
+})
+
 socket.on('online', function (data) {
   console.log(data);
 })
