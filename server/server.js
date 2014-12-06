@@ -99,11 +99,11 @@ tableSvc.queryEntities('users', query, null, function (error, data, response) {
 // Go into the azure and pull this clients records. Compare the differences
 // between the running instances and what it should be on record.
 app.post('/update_package', function (req, res) {
-	console.log(req.body)
-	var body = JSON.parse(req.body)
+	//console.log(req.body)
+	//var body = JSON.parse(req.body)
 	// Set up variables we are going to need
-	var partitionKey = body['partition']
-		, rowKey = body['rowkey']
+	var partitionKey = req.body['partition']
+		, rowKey = req.body['rowkey']
 		, tableService = azure.createTableService(account_name, account_key) // by creating a new table service!
 
 	console.log(req.body)
