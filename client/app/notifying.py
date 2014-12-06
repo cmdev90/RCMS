@@ -1,10 +1,13 @@
+
 import requests, json
 
-
-url = 'http://rcms-cloud.herokuapp.com/user/login'
-payload = {'email':'john@mail.com', 'password':'password'}
 headers = {'content-type': 'application/json'}
 
-r = requests.post(url, data=json.dumps(payload), headers=headers)
-
-print r.text
+def notify_client(url, payload):
+	try:
+		r = requests.post(url, data=json.dumps(payload), headers=headers)
+		if len(str(r.text)) > 16:
+			return True
+	except Exception, e:
+		print e
+		return False
