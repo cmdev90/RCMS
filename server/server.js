@@ -98,19 +98,23 @@ app.post('/update_package', function (req, res) {
 		, rowKey = req.params['rowkey']
 		, tableService = azure.createTableService(account_name, account_key) // by creating a new table service!
 
-	// Try to retrieve the entity from the the table storage.
-	tableService.retrieveEntity('applications', partitionKey, rowKey, function (error, data, response){
-		if(error) return res.send('Goodbye cruel world!' + error)
-		if (data) {
-			UpdateInstancePackage({_package: data.package_type._, _port: data.port._, _authKey: data.RowKey._, _priority: 200}, function (error, response){
-				if (error) return res.send(error)
-				return res.send(response)
-			})
-		}
-		else {
- 			return res.send('response' + response)
- 		}
-	})
+	if (partitionKey && rowkey) {
+		// Try to retrieve the entity from the the table storage.
+		tableService.retrieveEntity('applications', partitionKey, rowKey, function (error, data, response){
+			if(error) return res.send('Goodbye cruel world!' + error)
+			if (data) {
+				UpdateInstancePackage({_package: data.package_type._, _port: data.port._, _authKey: data.RowKey._, _priority: 200}, function (error, response){
+					if (error) return res.send(error)
+					return res.send(response)
+				})
+			}
+			else {
+	 			return res.send('response' + response)
+	 		}
+		})
+	} else {
+		res.send('Invalid request.');
+	}
 })
 
 var port = process.env.PORT || 3000
