@@ -26,7 +26,7 @@ io.on('connection', function (socket){
     else if (data.type && data.type === 'create')
       createClient(data, this)
     else
-      socket.emit('error') // What a Terrible Failure!
+      socket.emit('error',{'message': 'Invalid request'}) // What a Terrible Failure!
   })
 
   // Now ask the client to authenticate themselves with the service
@@ -85,7 +85,7 @@ function authenticateClient (identity, secret, socket) {
     // This is not the more robust solution but it will work once the client isn't abusive.
     if (error) {
       debug.log('Socket (' + socket.id + ') provided the server with invalid authentication values.\n' + error.message)
-      socket.emit('error') 
+      socket.emit('error', {message: 'Invalid username or password.'}) 
     }
     else {
       debug.log('Successfully authenticated socket (' + socket.id + ') with the server.')
@@ -99,7 +99,7 @@ function createClient (data, socket) {
   datastore.makeOrUpdateUser(data, function (error) {
     if (error) {
       debug.log('Could not create account for socket (' + socket.id + ').\n' + error.message)
-      socket.emit('error')
+      socket.emit('error', {message: 'Could not create account. Client may already exist.'})
     }
     else {
       debug.log('Successfully created and authenticated socket (' + socket.id + ') with the server.')
