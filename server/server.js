@@ -4,7 +4,7 @@ var proc = require('child_process')
 	, azure = require('azure-storage')
 	, account_name = 'rcms' // Azure account information for accessing the table storage.
 	, account_key = '9L1kZqrgAovvt1KI3xOfRj6RxLPt+hWpAI2mfsJ3zpf6DjMCN/TqYcaCb956jYG8qELgWpv0T0Cn5OC4vCPOng=='
-	
+
 var bodyParser = require('body-parser');
 var multer = require('multer'); 
 
