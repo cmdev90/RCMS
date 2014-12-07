@@ -1,4 +1,15 @@
-import random, json
+import json, random
+from azure.storage import TableService, Entity
+
+
+# account_name = 'rcms'     
+# account_key = '9L1kZqrgAovvt1KI3xOfRj6RxLPt+hWpAI2mfsJ3zpf6DjMCN/TqYcaCb956jYG8qELgWpv0T0Cn5OC4vCPOng=='
+# table = 'ports'
+# partition = "ports"
+# priority = '200'
+
+# ts = TableService(account_name = account_name, account_key = account_key)
+# ts.create_table(table)
 
 
 json_data =	open('packages.json')
@@ -12,6 +23,24 @@ package_premium = "premium"
 package_enterprise = "enterprise"
 counter = 4000
 
+
+
+# def get_allPorts():
+#   count =  1
+#   try:
+#     ports = ts.query_entities(table, "PartitionKey eq '"+partition+"'")
+#     for x in ports:
+#       count +=1
+#     if count > 1 :
+#       print "not empty"
+#     else :
+#       print "empty"
+#   except Exception, e:
+#     print e
+
+
+
+# get_allPorts()
 
 # print locations
 

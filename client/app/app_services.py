@@ -10,6 +10,7 @@ priority = '200'
 
 ts = TableService(account_name = account_name, account_key = account_key)
 ts.create_table(table)
+# ts.delete_table(table)	
 
 auth = 'kjlhajkdlhfjhasdnfasdkjflnasdf'
 
