@@ -34,7 +34,7 @@ module.exports = function (partitionKey){
 
 	function makeOrUpdateUser(data, fn) {
 		// identity and secret are required variable.
-		if (!data.identity && !data.secret) return fn(true);
+		if (!data.identity && !data.secret) return fn(true)
 		else {
 			var entGen = azure.TableUtilities.entityGenerator
 				, user = {
@@ -46,7 +46,7 @@ module.exports = function (partitionKey){
 			tableSvc.insertEntity(table, user, function (error, result, response) {
 				if(error) return fn(error)
 				return fn(null, result)
-			});
+			})
 		}
 	}
 

@@ -5,12 +5,12 @@ var proc = require('child_process')
 	, account_name = 'rcms' // Azure account information for accessing the table storage.
 	, account_key = '9L1kZqrgAovvt1KI3xOfRj6RxLPt+hWpAI2mfsJ3zpf6DjMCN/TqYcaCb956jYG8qELgWpv0T0Cn5OC4vCPOng=='
 
-var bodyParser = require('body-parser');
-var multer = require('multer'); 
+var bodyParser = require('body-parser')
+var multer = require('multer') 
 
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(multer()); // for parsing multipart/form-data
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(multer()) // for parsing multipart/form-data
 
 // Create client record object here. This is all kept in the 
 // applications main memory for convience.
@@ -121,7 +121,7 @@ app.post('/update_package', function (req, res) {
 	 		}
 		})
 	} else {
-		res.send('Invalid request.');
+		res.send('Invalid request.')
 	}
 })
 

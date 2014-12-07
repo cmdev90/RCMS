@@ -90,9 +90,43 @@
 </style>
 </head>
 <body>
-  <button id="btn">click me</button>
-  <button id="btn_stats">click me</button>
+
+  <form id="connect-btn">
+    <fieldset>
+      <legend>Connection Settings</legend>
+      <input type="text" placeholder="Server URL" id="url" value="http://146.148.74.93"> <br \>
+      <input type="number" placeholder="Port" id="port" value="4001"><br \>
+      <button type="submit">Connect</button>
+    </fieldset>
+  </form>
+
+  <form id="create-btn">
+    <fieldset>
+      <legend>Create Account</legend>
+      <input type="text" placeholder="Full Name" id="name"> <br \>
+      <input type="email" placeholder="Email Address" id="email"> <br \>
+      <input type="password" placeholder="Secret" id="password"><br \>
+      <button type="submit">Create</button>    
+    </fieldset>
+  </form>
+
+  <form id="auth-btn">
+    <fieldset>
+      <legend>Account Login</legend>
+      <input type="email" placeholder="Email Address" id="identity"> <br \>
+      <input type="password" placeholder="Secret" id="secret"><br \>
+      <button type="submit">Login</button>    
+    </fieldset>
+  </form>
   
+  <form id="subscribe-btn">
+    <fieldset>
+      <legend>Subscribe To</legend>
+      <input type="email" placeholder="Email Address" id="subscribe"> <br \>
+      <button type="submit">Subscribe</button>    
+    </fieldset>
+  </form>
+
   <div id="chat-box">
     <div id="chat-header">Online Chat</div>
     <div id="chat-inner">
@@ -109,174 +143,128 @@
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
 
 <script type="text/javascript">
+  var connection
 
-  // Status indicators for messages.
-  var FLAGS = {
-    NCC : 1, // new client connection.
-    LIST : 2, // sends list of all avaliable clients.
-    REM : 3, // remove client.
-    CREQ : 4, // Chat request flag.
-    JOINT : 5, // tells the client to join this room.
-  }
+  $(document).on('submit', '#connect-btn', function (e) {
+    e.stopPropagation()
+    connection = new Connection($('#url').val(), $('#port').val(), function() {
+      alert('Connected succesfully. Server has requested authentication.')
+      connection.handleError()
+      connection.handleAlert()
+    })
+    return false
+  })
 
-  var me = {}; // object that holds connection information about this client.
+  $(document).on('submit', '#create-btn', function (e) {
+    e.stopPropagation()
+    connection.create($('#email').val(), $('#password').val(), $('#name').val(), function () {
+      alert('Succesfully created your new account. The sever has also authenticated your account.\n\nYou are not connected!')
+    })
 
-  var socket = io.connect('http://190.213.222.115:4001', {data: 'test datat to see if this works!'});
-
-socket.on('authenticate', function(data){
-  // client must keep track of own identity and nonce value
-  // for security.
-  // me.id = data.me;
-  // me.nonce = data.nonce;
-
-  socket.emit('authenticate', {
-    identity: 'cherlton@mail.com'
-    , secret: 'could be a password or device uuid'
-    , name: 'Cherlton Millette'
-    , status: 'Avaliavble'
-    , type: 'authenticate'
-  })  
-})
-
-socket.on('online', function (data) {
-  console.log(data);
-})
-
-socket.on('authenticated', function(){
-  socket.emit('subscribe', ['cherlton@mail.com', 'cherlton1@mail.com', 'cherlton2@mail.com;', 'dude@mail.com'])
-  console.log('connected successfully!');
-  socket.emit('subscribe', 'cherlton@mail.com')
-})
-
-socket.on('subscribed', function (data) {
-  console.log(data)
-})
+    return false
+  })
 
 
-socket.on('stats', function (data) {
-  console.log(data)
-})
+  $(document).on('submit', '#auth-btn', function (e) {
+    e.stopPropagation()
+    connection.authenticate($('#identity').val(), $('#secret').val(), function () {
+      alert('Succesfully authenticated with the server.')
+    })
 
-$(document).on('click', '#btn_stats', function () {
-  socket.emit('getStats');
-})
+    return false
+  })
 
+  $(document).on('submit', '#subscribe-btn', function (e) {
+    e.stopPropagation()
+    connection.subscribe($('#subscribe').val(), function (data) {
+      alert('Succesfully subscribed to ' + $('#subscribe').val())
+      console.log(data)
+    })
 
-  socket.on('alert', function (data) {
-    console.log(data);
+    return false
+  })
 
-    switch(data.type){
-      case (FLAGS.NCC) :
-        $('body').append('<button class="client" id="' + data.cid + '">' + data.cid + '</button>');
-        break;
-
-      case (FLAGS.LIST) :
-        $.each(data.clients, function (index, value){
-          $('body').append('<button class="client" id="' + value.cid + '">' + value.cid + '</button>');
-        });
-        me.id = data.me;
-        me.nonce = data.nonce;
-        break;
-
-      case (FLAGS.REM) :
-        // Flag sent to remove the specified client as they have
-        // disconnected from the server.
-        $('#' + data.cid).remove();
-        break;
-
-      case (FLAGS.CREQ) :
-        // A chat request broadcast was sent. If addressed to me
-        // send an acknowledgment to the server with my nonce for
-        // authentication.
-        if(data.cid === me.id) {
-          socket.emit('acknowledge', {nonce : me.nonce, room : data.room});
-        }
-        break;
-
-      case (FLAGS.JOINT) :
-        $("#chat-inner").toggle("fast");
-
-        // put this here for the time being...
-        me.room = data.room;
-        break;
-
-      default : break;
-
-    }
-  });
-
-  $(document).on('click', '.client', function (){
-    var client = $(this).attr('id');
-    console.log(client);
-    socket.emit('chat', { id : client });
-  });
-
-  socket.on('err', function (data) {
-    alert("Oh Snap...\n\nThe monkeys we hired broke somthing again. Service will be restored shortly.\n\nPlease contact us at if problems persist.");
-    console.log(data);
-  });
-
-  socket.on('message', function (object) {
-      var message = '<div class="message-you">' + object.message + 
-                    '<br/><div class="date-time">' + object.timestamp + 
-                    '</div></div>';
-      
-      $('#chat-output').append(message);
-
-      var div = $('#chat-output');
-      div.scrollTop(div.scrollTop() + 9999999999);
-  });
-
-  var getDateTime = function () {
-    var curr = new Date();
-    var datetime = "";
-
-    datetime += curr.getDate() + '-' +
-                (curr.getMonth() + 1) + '-' +
-                curr.getFullYear() + ' @ ' +
-                curr.getHours() + ':' +
-                curr.getMinutes();
-
-    return datetime;
-  }
 
   $("#chat-input").keypress(function(e) {
-    var value = $('#chat-input').val();
+    var value = $('#chat-input').val()
 
     if(e && e.keyCode === 13) {
-      $('#chat-input').trigger('focusout');
+      $('#chat-input').trigger('focusout')
       if(value*1 !== 0) {
-        chatOut({message : value});
+        //connection.sendMessage('fghjk', value)
       }
-      $(this).val('');
+      $(this).val('')
     }
-  });
+  })
 
   $("#chat-input").keyup(function (e){
     if(e && e.keyCode === 13)
-      $(this).val('');
-  });
+      $(this).val('')
+  })
 
-  var chatOut = function (object){
-      var message = '<div class="message-me">' + object.message + 
-                    '<br/><div class="date-time">' + getDateTime() + 
-                    '</div></div>';
+  var Connection = (function() {
+    var socket
 
-      object.timestamp = getDateTime();
-      object.room = me.room;
-      console.log(object);
-      object.identity = 'nick@mail.com'
+    var connection = function(server, port, responseHandler){
+      socket = io.connect(server + ':' + port)
+      socket.on('authenticate', responseHandler)
+    }
 
-      socket.emit('message', object);
-      
-      $('#chat-output').append(message);
+    connection.prototype.authenticate = function (identity, secret, responseHandler) {
+      socket.emit('authenticate', {
+        'identity': identity
+        , 'secret': secret
+        , 'type': 'authenticate'
+      })
 
-      var div = $('#chat-output');
-      div.scrollTop(div.scrollTop() + 9999999999);
-  };
+      socket.on('authenticated', responseHandler)
+    }
+
+    connection.prototype.create = function (identity, secret, name, responseHandler) {
+      socket.emit('authenticate', {
+        'identity': identity
+        , 'secret': secret
+        , 'name': name
+        , 'type': 'create'
+      })
+
+      socket.on('authenticated', responseHandler)
+    }
+
+    connection.prototype.subscribe = function (identities, responseHandler) {
+      socket.emit('subscribe', identities)
+      socket.on('subscribed', responseHandler)
+    }
+
+    connection.prototype.sendMessage = function (identity, message) {
+      socket.emit('message', {'identity': identity, 'message': message})
+    }
+
+    connection.prototype.recieveMessage = function (messageHandler) {
+      socket.on('message', messageHandler)
+    }
+
+    connection.prototype.handleError = function (errorHandler) {
+      socket.on('err', function (data) {
+        alert("Oh Snap...\n\n" + data.message) 
+        console.log(data)
+      })
+    }
+
+    connection.prototype.handleAlert = function (alertHandler) {
+
+    }
+
+    connection.prototype.getSocket = function () {
+      return socket
+    }
+
+    return connection
+  }())
+
 
   $('#chat-header').on('click', function (){
-    $("#chat-inner").toggle("fast");
+    $("#chat-inner").toggle("fast")
   })
 </script>
 
