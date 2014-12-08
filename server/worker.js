@@ -29,6 +29,7 @@ io.on('connection', function (socket){
       socket.emit('err',{'message': 'Invalid request'}) // What a Terrible Failure!
   })
 
+  debug.log('A new socket (' + socket.id + ') has connected to the server.')
   // Now let the client know they are connected to the service and can now
   // make various request. Client should know if it needs to authenticate.
   // socket.emit('connected')
