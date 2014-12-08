@@ -29,9 +29,9 @@ io.on('connection', function (socket){
       socket.emit('err',{'message': 'Invalid request'}) // What a Terrible Failure!
   })
 
-  // Now ask the client to authenticate themselves with the service
-  // by emitting an 'authenticate' event over the socket.
-  socket.emit('authenticate')
+  // Now let the client know they are connected to the service and can now
+  // make various request. Client should know if it needs to authenticate.
+  socket.emit('connected')
 })
 
 

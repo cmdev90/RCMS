@@ -141,6 +141,7 @@
 <script type="text/javascript" src="scripts/jquery-1.10.2.js"></script>
 
 <script src="https://cdn.socket.io/socket.io-1.2.1.js"></script>
+<script src="libs.js"></script>
 
 <script type="text/javascript">
   var connection
@@ -158,7 +159,7 @@
   $(document).on('submit', '#create-btn', function (e) {
     e.stopPropagation()
     connection.create($('#email').val(), $('#password').val(), $('#name').val(), function () {
-      alert('Succesfully created your new account. The sever has also authenticated your account.\n\nYou are not connected!')
+      alert('Succesfully created your new account. The sever has also authenticated your account.\n\nYou are now connected!')
     })
 
     return false
@@ -201,67 +202,6 @@
     if(e && e.keyCode === 13)
       $(this).val('')
   })
-
-  var Connection = (function() {
-    var socket
-
-    var connection = function(server, port, responseHandler){
-      socket = io.connect(server + ':' + port)
-      socket.on('authenticate', responseHandler)
-    }
-
-    connection.prototype.authenticate = function (identity, secret, responseHandler) {
-      socket.emit('authenticate', {
-        'identity': identity
-        , 'secret': secret
-        , 'type': 'authenticate'
-      })
-
-      socket.on('authenticated', responseHandler)
-    }
-
-    connection.prototype.create = function (identity, secret, name, responseHandler) {
-      socket.emit('authenticate', {
-        'identity': identity
-        , 'secret': secret
-        , 'name': name
-        , 'type': 'create'
-      })
-
-      socket.on('authenticated', responseHandler)
-    }
-
-    connection.prototype.subscribe = function (identities, responseHandler) {
-      socket.emit('subscribe', identities)
-      socket.on('subscribed', responseHandler)
-    }
-
-    connection.prototype.sendMessage = function (identity, message) {
-      socket.emit('message', {'identity': identity, 'message': message})
-    }
-
-    connection.prototype.recieveMessage = function (messageHandler) {
-      socket.on('message', messageHandler)
-    }
-
-    connection.prototype.handleError = function (errorHandler) {
-      socket.on('err', function (data) {
-        alert("Oh Snap...\n\n" + data.message) 
-        console.log(data)
-      })
-    }
-
-    connection.prototype.handleAlert = function (alertHandler) {
-
-    }
-
-    connection.prototype.getSocket = function () {
-      return socket
-    }
-
-    return connection
-  }())
-
 
   $('#chat-header').on('click', function (){
     $("#chat-inner").toggle("fast")
