@@ -159,6 +159,14 @@
       connection.handleNotification(log)
       connection.recieveMessage(function (data) {
         console.log(data)
+        $('#participant').val(data.from)
+        var message = '<div class="message-you">' + data.message + '</div>';
+        
+        $('#chat-output').append(message);
+
+        var div = $('#chat-output');
+        div.scrollTop(div.scrollTop() + 9999999999);
+
       })
     })
     return false
@@ -201,6 +209,11 @@
       $('#chat-input').trigger('focusout')
       if(value*1 !== 0) {
         connection.sendMessage($('#participant').val(), value)
+        var message = '<div class="message-me">' + value + '</div>';
+        $('#chat-output').append(message);
+
+        var div = $('#chat-output');
+        div.scrollTop(div.scrollTop() + 9999999999);
       }
       $(this).val('')
     }
