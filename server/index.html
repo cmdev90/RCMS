@@ -146,12 +146,15 @@
 <script type="text/javascript">
   var connection
 
+  var log = function(data) { console.log(data) }
+
   $(document).on('submit', '#connect-btn', function (e) {
     e.stopPropagation()
     connection = new Connection($('#url').val(), $('#port').val(), function() {
       alert('Connected succesfully. Server has requested authentication.')
-      connection.handleError()
-      connection.handleAlert()
+      connection.handleError(log)
+      connection.handleAlert(log)
+      connection.handleNotification(log)
     })
     return false
   })

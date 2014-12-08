@@ -49,7 +49,7 @@
     }
 
     connection.prototype.handleNotification = function (notificationHanler) {
-      socket.on('notification', notificationHanler)
+      socket.on('notify', notificationHanler)
     }
 
     connection.prototype.getSocket = function () {

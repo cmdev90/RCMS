@@ -31,7 +31,7 @@ io.on('connection', function (socket){
 
   // Now let the client know they are connected to the service and can now
   // make various request. Client should know if it needs to authenticate.
-  socket.emit('connected')
+  // socket.emit('connected')
 })
 
 
@@ -66,7 +66,7 @@ function notifySubscribers (identity) {
       var socket = connectedSockets[subscriber]
       if (socket && subscriber !== identity) { // If there is a socket with the identity we issue an alert to it.
         debug.log('Server notification for client (' + socket.id + ') identity (' + socket.__identity__ + ') - ' + identity)
-        socket.emit('online', {'identity': identity})
+        socket.emit('notify', {'identity': identity})
       }
     }
   })
