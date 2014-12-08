@@ -127,6 +127,8 @@
     </fieldset>
   </form>
 
+  <input type="text" placeholder="Send To" id="participant">
+
   <div id="chat-box">
     <div id="chat-header">Online Chat</div>
     <div id="chat-inner">
@@ -155,6 +157,9 @@
       connection.handleError(log)
       connection.handleAlert(log)
       connection.handleNotification(log)
+      connection.recieveMessage(function (data) {
+        console.log(data)
+      })
     })
     return false
   })
@@ -195,7 +200,7 @@
     if(e && e.keyCode === 13) {
       $('#chat-input').trigger('focusout')
       if(value*1 !== 0) {
-        //connection.sendMessage('fghjk', value)
+        connection.sendMessage($('#participant').val(), value)
       }
       $(this).val('')
     }

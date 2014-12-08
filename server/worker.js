@@ -160,7 +160,7 @@ function sendMessage (identity, message, socket) {
   // If this participant has a socket we pipe the message over the socket to them.
   if (participant) {
     datastore.addStatistics({ transmission: 'outgoing', length: message.length, 'event': 'message' })
-    participant.emit('message', { 'message' : message })
+    participant.emit('message', { 'from': socket.__identity__, 'message' : message })
     socket.emit('notification', {type: 'message', delivery: 'successful'})
   } else {
     socket.emit('notification', {type: 'message', delivery: 'failed'})
