@@ -16,6 +16,12 @@ app.listen(port, function(){
 
 var connectedSockets = {} // each connected socket will be stored in this object so it can be refrenced easy
 
+var debug = {
+  log: function (message) {
+    console.log(message)
+  }
+}
+
 // Create an event for wne clients connect.
 io.on('connection', function (socket){
   // We need the client to authenticate themselves with the server so set an
@@ -29,20 +35,13 @@ io.on('connection', function (socket){
       socket.emit('err',{'message': 'Invalid request'}) // What a Terrible Failure!
   })
 
-  debug.log('A new socket (' + socket.id + ') has connected to the server.')
+  debug.log('A new socket (' + socket.id + ') has connected to the server. Waiting for authentication.')
   // Now let the client know they are connected to the service and can now
   // make various request. Client should know if it needs to authenticate.
   // socket.emit('connected')
 })
 
-
-var debug = {
-  log: function (message) {
-    console.log(message)
-  }
-}
-
-function connectSocket(identity, socket) {
+function connectSocket (identity, socket) {
   debug.log('Adding socket (' + socket.id + ') with identity (' + identity + ')')
   socket['__identity__'] = identity // The socket must know its own identity!
   connectedSockets[identity] = socket // Create an association between the User identity and this socket.
